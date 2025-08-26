@@ -3,1423 +3,1056 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多语种学习小助手</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>多语种学习工具</title>
     <style>
-        :root {
-            --primary-color: #8B5CF6;
-            --secondary-color: #7C3AED;
-            --accent-color: #A78BFA;
-            --light-color: #F5F3FF;
-            --dark-color: #4C1D95;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background-color: #F9FAFB;
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #4A148C;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
         
-        .purple-theme {
-            background-color: var(--primary-color);
-            color: white;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(138, 43, 226, 0.2);
+            padding: 30px;
+            background: linear-gradient(to bottom right, #ffffff, #f8f0fc);
+            border: 2px solid #e1bee7;
         }
         
-        .purple-text {
-            color: var(--primary-color);
-        }
-        
-        .purple-border {
-            border-color: var(--primary-color);
-        }
-        
-        .purple-bg {
-            background-color: var(--light-color);
-        }
-        
-        .btn-purple {
-            background-color: var(--primary-color);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-purple:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
-        }
-        
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tab-active {
-            border-bottom: 3px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-        
-        .word-card {
-            transition: all 0.3s ease;
-        }
-        
-        .word-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(139, 92, 246, 0.15);
-        }
-        
-        .word-remembered {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-        
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--dark-color);
-            color: #fff;
+        header {
             text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ce93d8;
+        }
+        
+        h1 {
+            color: #8A2BE2;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(138, 43, 226, 0.3);
+        }
+        
+        h2, h3 {
+            color: #9C27B0;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ce93d8;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            background: linear-gradient(to bottom, #f3e5f5, #e1bee7);
+            border: 1px solid #ce93d8;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            font-weight: 600;
+            color: #6A1B9A;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: linear-gradient(to bottom, #e1bee7, #ce93d8);
+            color: #4A148C;
+        }
+        
+        .tab.active {
+            background: linear-gradient(to bottom, #ffffff, #f3e5f5);
+            border-bottom: 2px solid white;
+            margin-bottom: -2px;
+            color: #8A2BE2;
+            box-shadow: 0 -2px 5px rgba(138, 43, 226, 0.1);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            border: 1px solid #ce93d8;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            background-color: #fafafa;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #6A1B9A;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ce93d8;
             border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #fafafa;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #8A2BE2;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(138, 43, 226, 0.25);
+            background-color: white;
+        }
+        
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        button {
+            background: linear-gradient(to bottom, #9C27B0, #7B1FA2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(156, 39, 176, 0.3);
+        }
+        
+        button:hover {
+            background: linear-gradient(to bottom, #AB47BC, #8E24AA);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(156, 39, 176, 0.4);
+        }
+        
+        .btn-edit {
+            background: linear-gradient(to bottom, #FF69B4, #E91E63);
+            margin-right: 5px;
+            padding: 6px 12px;
             font-size: 14px;
         }
         
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        .btn-edit:hover {
+            background: linear-gradient(to bottom, #FF4081, #C2185B);
         }
         
-        .loading-spinner {
-            border: 3px solid rgba(139, 92, 246, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid var(--primary-color);
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
+        .btn-delete {
+            background: linear-gradient(to bottom, #F44336, #D32F2F);
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        
+        .btn-delete:hover {
+            background: linear-gradient(to bottom, #E53935, #C62828);
+        }
+        
+        .btn-export {
+            background: linear-gradient(to bottom, #673AB7, #512DA8);
             margin-left: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .btn-export:hover {
+            background: linear-gradient(to bottom, #5E35B1, #4527A0);
         }
         
-        .language-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-right: 5px;
+        .list-container {
+            margin-top: 30px;
         }
         
-        .lang-en { background-color: #DBEAFE; color: #1E40AF; }
-        .lang-zh { background-color: #FEE2E2; color: #B91C1C; }
-        .lang-ja { background-color: #DCFCE7; color: #166534; }
-        .lang-ko { background-color: #E0E7FF; color: #3730A3; }
-        .lang-fr { background-color: #FCE7F3; color: #9F1239; }
-        .lang-de { background-color: #FEF3C7; color: #92400E; }
-        .lang-es { background-color: #D1FAE5; color: #065F46; }
-        .lang-th { background-color: #E9D5FF; color: #6B21A8; }
-        .lang-ru { background-color: #FECACA; color: #991B1B; }
-        .lang-it { background-color: #FED7AA; color: #9A3412; }
-        .lang-pt { background-color: #BFDBFE; color: #1D4ED8; }
-        .lang-ar { background-color: #F3E8FF; color: #6B21A8; }
-        .lang-hi { background-color: #FECDD3; color: #881337; }
-        .lang-vi { background-color: #DBEAFE; color: #1E40AF; }
-        .lang-other { background-color: #E5E7EB; color: #4B5563; }
-        
-        .word-in-text {
-            cursor: pointer;
-            padding: 1px 3px;
-            border-radius: 3px;
-            transition: background-color 0.2s;
+        .list-item {
+            background: linear-gradient(to bottom right, #ffffff, #f3e5f5);
+            border: 1px solid #e1bee7;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(138, 43, 226, 0.1);
+            transition: all 0.3s ease;
         }
         
-        .word-in-text:hover {
-            background-color: rgba(139, 92, 246, 0.2);
+        .list-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.2);
+            border-color: #ce93d8;
         }
         
-        .share-button {
+        .list-item h3 {
+            margin-bottom: 10px;
+            color: #8A2BE2;
+            font-size: 1.3rem;
+        }
+        
+        .list-item .meta {
+            color: #9C27B0;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .list-item .actions {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: white;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .share-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            top: 15px;
+            right: 15px;
         }
         
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(138, 43, 226, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
         
         .modal-content {
             background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 25px;
+            border-radius: 10px;
             width: 80%;
-            max-width: 500px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+            border: 2px solid #e1bee7;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1bee7;
         }
         
         .close {
-            color: #aaa;
-            float: right;
             font-size: 28px;
-            font-weight: bold;
             cursor: pointer;
+            color: #9C27B0;
+            transition: color 0.3s;
         }
         
         .close:hover {
-            color: black;
+            color: #6A1B9A;
         }
         
-        .language-select {
-            background-color: white;
-            border: 1px solid var(--primary-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: var(--primary-color);
-            font-weight: 500;
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
         }
         
-        .language-select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        .filter-container select {
+            flex: 1;
+        }
+        
+        .export-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(to right, #f3e5f5, #e1bee7);
+            border-radius: 8px;
+            border: 1px solid #ce93d8;
+        }
+        
+        .export-container select {
+            width: auto;
+            min-width: 150px;
+            margin-right: 10px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #9C27B0, #E91E63);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+            z-index: 1001;
+            display: none;
+            font-weight: 600;
         }
         
         @media (max-width: 768px) {
-            .card {
-                margin-bottom: 15px;
+            .container {
+                padding: 15px;
             }
             
-            .word-card {
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                margin-bottom: 5px;
+                flex-grow: 1;
+                text-align: center;
+            }
+            
+            .list-item .actions {
+                position: static;
+                margin-top: 10px;
+                display: flex;
+                justify-content: flex-end;
+            }
+            
+            .export-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .export-container select, .export-container button {
+                width: 100%;
                 margin-bottom: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-6 max-w-6xl">
-        <!-- 标题区域 -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold purple-text mb-2">多语种学习小助手</h1>
-            <p class="text-gray-600">学习多种语言，拓展你的世界</p>
+    <div class="container">
+        <header>
+            <h1>多语种学习工具</h1>
+            <p>添加、管理和学习多种语言的单词和文章</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="words">单词管理</div>
+            <div class="tab" data-tab="articles">文章管理</div>
+            <div class="tab" data-tab="study">学习模式</div>
         </div>
         
-        <!-- 标签页导航 -->
-        <div class="flex border-b mb-6">
-            <button class="py-3 px-6 font-medium tab-active" id="words-tab">
-                <i class="fas fa-language mr-2"></i>单词学习
-            </button>
-            <button class="py-3 px-6 font-medium text-gray-500 hover:text-purple-600" id="articles-tab">
-                <i class="fas fa-book-open mr-2"></i>文章阅读
-            </button>
-            <button class="py-3 px-6 font-medium text-gray-500 hover:text-purple-600" id="settings-tab">
-                <i class="fas fa-cog mr-2"></i>设置
-            </button>
-        </div>
-        
-        <!-- 单词学习区域 -->
-        <div id="words-content" class="tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 左侧：单词列表 -->
-                <div class="md:col-span-2">
-                    <div class="card bg-white p-6 mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold purple-text">我的单词库</h2>
-                            <div class="flex space-x-2">
-                                <select id="language-filter" class="language-select">
-                                    <option value="all">所有语言</option>
-                                    <option value="en">英语</option>
-                                    <option value="zh">中文</option>
-                                    <option value="ja">日语</option>
-                                    <option value="ko">韩语</option>
-                                    <option value="fr">法语</option>
-                                    <option value="de">德语</option>
-                                    <option value="es">西班牙语</option>
-                                    <option value="th">泰语</option>
-                                    <option value="ru">俄语</option>
-                                    <option value="it">意大利语</option>
-                                    <option value="pt">葡萄牙语</option>
-                                    <option value="ar">阿拉伯语</option>
-                                    <option value="hi">印地语</option>
-                                    <option value="vi">越南语</option>
-                                    <option value="other">其他</option>
-                                </select>
-                                <button id="shuffle-words" class="btn-purple px-4 py-2 rounded-lg">
-                                    <i class="fas fa-random mr-2"></i>乱序
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div id="words-list" class="space-y-3 max-h-96 overflow-y-auto pr-2">
-                            <!-- 单词列表将在这里动态生成 -->
-                        </div>
-                        
-                        <div class="mt-4 flex justify-between">
-                            <div>
-                                <span id="word-count" class="text-gray-600">共 0 个单词</span>
-                                <span id="remembered-count" class="text-gray-600 ml-4">已记住 0 个</span>
-                            </div>
-                            <button id="clear-remembered" class="text-sm text-red-500 hover:text-red-700">
-                                清除已记住标记
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- 批量上传单词 -->
-                    <div class="card bg-white p-6">
-                        <h2 class="text-xl font-bold purple-text mb-4">批量上传单词</h2>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 mb-2">上传单词文件 (TXT格式)</label>
-                            <input type="file" id="word-file-upload" accept=".txt" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                            <p class="text-sm text-gray-600 mb-2">文件格式说明：</p>
-                            <p class="text-sm text-gray-600">每行一个单词，格式为：语言|单词|中文意思|注释1|注释2|...|例句1(原文)|例句1(翻译)|例句2(原文)|例句2(翻译)|...</p>
-                            <p class="text-sm text-gray-600 mt-2">示例：</p>
-                            <p class="text-sm text-gray-600">en|hello|你好|问候语|Hi, how are you?|你好，最近怎么样？|Hello, my name is John.|你好，我叫约翰。</p>
-                        </div>
-                        <button id="upload-words-btn" class="btn-purple px-4 py-2 rounded-lg">
-                            <i class="fas fa-upload mr-2"></i>上传单词
-                        </button>
-                    </div>
+        <div id="words-tab" class="tab-content active">
+            <h2>添加新单词</h2>
+            <form id="word-form">
+                <div class="form-group">
+                    <label for="word-text">单词</label>
+                    <input type="text" id="word-text" required>
                 </div>
-                
-                <!-- 右侧：添加单词 -->
-                <div class="md:col-span-1">
-                    <div class="card bg-white p-6 sticky top-6">
-                        <h2 class="text-xl font-bold purple-text mb-4">添加新单词</h2>
-                        <form id="add-word-form">
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">语言</label>
-                                <select id="word-language" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 language-select">
-                                    <option value="en">英语</option>
-                                    <option value="zh">中文</option>
-                                    <option value="ja">日语</option>
-                                    <option value="ko">韩语</option>
-                                    <option value="fr">法语</option>
-                                    <option value="de">德语</option>
-                                    <option value="es">西班牙语</option>
-                                    <option value="th">泰语</option>
-                                    <option value="ru">俄语</option>
-                                    <option value="it">意大利语</option>
-                                    <option value="pt">葡萄牙语</option>
-                                    <option value="ar">阿拉伯语</option>
-                                    <option value="hi">印地语</option>
-                                    <option value="vi">越南语</option>
-                                    <option value="other">其他</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">单词</label>
-                                <input type="text" id="word-text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">中文意思</label>
-                                <input type="text" id="word-translation" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">注释 (每行一个)</label>
-                                <textarea id="word-notes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">例句 (原文)</label>
-                                <textarea id="word-example-original" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">例句翻译</label>
-                                <textarea id="word-example-translation" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
-                            </div>
-                            <button type="submit" class="btn-purple w-full py-3 rounded-lg font-medium">
-                                <i class="fas fa-plus mr-2"></i>添加单词
-                            </button>
-                        </form>
-                    </div>
+                <div class="form-group">
+                    <label for="word-translation">翻译</label>
+                    <input type="text" id="word-translation" required>
                 </div>
-            </div>
-        </div>
-        
-        <!-- 文章阅读区域 -->
-        <div id="articles-content" class="tab-content hidden">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 左侧：文章列表 -->
-                <div class="md:col-span-1">
-                    <div class="card bg-white p-6 mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold purple-text">我的文章库</h2>
-                            <select id="article-language-filter" class="language-select">
-                                <option value="all">所有语言</option>
-                                <option value="en">英语</option>
-                                <option value="zh">中文</option>
-                                <option value="ja">日语</option>
-                                <option value="ko">韩语</option>
-                                <option value="fr">法语</option>
-                                <option value="de">德语</option>
-                                <option value="es">西班牙语</option>
-                                <option value="th">泰语</option>
-                                <option value="ru">俄语</option>
-                                <option value="it">意大利语</option>
-                                <option value="pt">葡萄牙语</option>
-                                <option value="ar">阿拉伯语</option>
-                                <option value="hi">印地语</option>
-                                <option value="vi">越南语</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-                        
-                        <div id="articles-list" class="space-y-3 max-h-96 overflow-y-auto pr-2">
-                            <!-- 文章列表将在这里动态生成 -->
-                        </div>
-                        
-                        <div class="mt-4">
-                            <span id="article-count" class="text-gray-600">共 0 篇文章</span>
-                        </div>
-                    </div>
-                    
-                    <!-- 批量上传文章 -->
-                    <div class="card bg-white p-6">
-                        <h2 class="text-xl font-bold purple-text mb-4">批量上传文章</h2>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 mb-2">上传文章文件 (TXT格式)</label>
-                            <input type="file" id="article-file-upload" accept=".txt" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                            <p class="text-sm text-gray-600 mb-2">文件格式说明：</p>
-                            <p class="text-sm text-gray-600">每篇文章以"语言|标题"开始，然后是文章内容，文章之间用"---"分隔</p>
-                            <p class="text-sm text-gray-600 mt-2">示例：</p>
-                            <p class="text-sm text-gray-600">en|日常问候<br>Hello, how are you?<br>I'm fine, thank you.<br>---<br>zh|餐厅对话<br>A: 你好，欢迎光临！<br>B: 谢谢，我想预订一张桌子。</p>
-                        </div>
-                        <button id="upload-articles-btn" class="btn-purple px-4 py-2 rounded-lg">
-                            <i class="fas fa-upload mr-2"></i>上传文章
-                        </button>
-                    </div>
+                <div class="form-group">
+                    <label for="word-language">语言</label>
+                    <select id="word-language" required>
+                        <option value="">选择语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
                 </div>
-                
-                <!-- 右侧：文章阅读 -->
-                <div class="md:col-span-2">
-                    <div class="card bg-white p-6 mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold purple-text">文章阅读</h2>
-                            <div class="flex items-center">
-                                <label class="flex items-center cursor-pointer">
-                                    <div class="relative">
-                                        <input type="checkbox" id="online-annotation" class="sr-only">
-                                        <div class="block bg-gray-300 w-14 h-8 rounded-full"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
-                                    </div>
-                                    <div class="ml-3 text-gray-700 font-medium">联网注释模式</div>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div id="article-reader" class="bg-gray-50 p-6 rounded-lg min-h-96 max-h-96 overflow-y-auto">
-                            <div class="text-center text-gray-500 py-12">
-                                <i class="fas fa-book text-4xl mb-4"></i>
-                                <p>请从左侧选择一篇文章开始阅读</p>
-                            </div>
-                        </div>
-                        
-                        <div id="word-tooltip" class="hidden absolute bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-10 max-w-xs">
-                            <div id="tooltip-content"></div>
-                            <button id="add-tooltip-word" class="mt-2 btn-purple text-sm px-3 py-1 rounded">
-                                <i class="fas fa-plus mr-1"></i>添加到单词库
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- 添加文章 -->
-                    <div class="card bg-white p-6">
-                        <h2 class="text-xl font-bold purple-text mb-4">添加新文章</h2>
-                        <form id="add-article-form">
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">语言</label>
-                                <select id="article-language" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 language-select">
-                                    <option value="en">英语</option>
-                                    <option value="zh">中文</option>
-                                    <option value="ja">日语</option>
-                                    <option value="ko">韩语</option>
-                                    <option value="fr">法语</option>
-                                    <option value="de">德语</option>
-                                    <option value="es">西班牙语</option>
-                                    <option value="th">泰语</option>
-                                    <option value="ru">俄语</option>
-                                    <option value="it">意大利语</option>
-                                    <option value="pt">葡萄牙语</option>
-                                    <option value="ar">阿拉伯语</option>
-                                    <option value="hi">印地语</option>
-                                    <option value="vi">越南语</option>
-                                    <option value="other">其他</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">标题</label>
-                                <input type="text" id="article-title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" required>
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">内容</label>
-                                <textarea id="article-content" rows="8" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" required></textarea>
-                            </div>
-                            <button type="submit" class="btn-purple w-full py-3 rounded-lg font-medium">
-                                <i class="fas fa-plus mr-2"></i>添加文章
-                            </button>
-                        </form>
-                    </div>
+                <div class="form-group">
+                    <label for="word-example">例句（可选）</label>
+                    <textarea id="word-example"></textarea>
                 </div>
-            </div>
-        </div>
-        
-        <!-- 设置区域 -->
-        <div id="settings-content" class="tab-content hidden">
-            <div class="card bg-white p-6 mb-6">
-                <h2 class="text-xl font-bold purple-text mb-4">数据管理</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h3 class="font-medium text-gray-700 mb-3">导出数据</h3>
-                        <p class="text-gray-600 text-sm mb-4">将您的单词和文章数据导出为JSON文件，可用于备份或迁移到其他设备。</p>
-                        <button id="export-data" class="btn-purple px-4 py-2 rounded-lg">
-                            <i class="fas fa-download mr-2"></i>导出数据
-                        </button>
-                    </div>
-                    <div>
-                        <h3 class="font-medium text-gray-700 mb-3">导入数据</h3>
-                        <p class="text-gray-600 text-sm mb-4">从JSON文件导入之前导出的单词和文章数据。</p>
-                        <input type="file" id="import-data" accept=".json" class="mb-2">
-                        <button id="import-data-btn" class="btn-purple px-4 py-2 rounded-lg">
-                            <i class="fas fa-upload mr-2"></i>导入数据
-                        </button>
-                    </div>
-                </div>
-            </div>
+                <button type="submit">添加单词</button>
+            </form>
             
-            <div class="card bg-white p-6">
-                <h2 class="text-xl font-bold purple-text mb-4">清除数据</h2>
-                <p class="text-gray-600 mb-4">警告：此操作将永久删除所有单词和文章数据，且无法恢复。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button id="clear-words" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
-                        <i class="fas fa-trash-alt mr-2"></i>清除所有单词
-                    </button>
-                    <button id="clear-articles" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
-                        <i class="fas fa-trash-alt mr-2"></i>清除所有文章
-                    </button>
+            <div class="list-container">
+                <div class="export-container">
+                    <h2>单词列表</h2>
+                    <div>
+                        <select id="wordExportLanguage">
+                            <option value="all">全部语言</option>
+                            <option value="英语">英语</option>
+                            <option value="泰语">泰语</option>
+                            <option value="日语">日语</option>
+                            <option value="韩语">韩语</option>
+                            <option value="越南语">越南语</option>
+                            <option value="西班牙语">西班牙语</option>
+                            <option value="法语">法语</option>
+                            <option value="德语">德语</option>
+                        </select>
+                        <button id="exportWordsCsv" class="btn-export">导出单词(CSV)</button>
+                    </div>
                 </div>
+                <div class="filter-container">
+                    <select id="word-filter">
+                        <option value="all">所有语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
+                </div>
+                <div id="words-list"></div>
+            </div>
+        </div>
+        
+        <div id="articles-tab" class="tab-content">
+            <h2>添加新文章</h2>
+            <form id="article-form">
+                <div class="form-group">
+                    <label for="article-title">标题</label>
+                    <input type="text" id="article-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="article-content">内容</label>
+                    <textarea id="article-content" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="article-language">语言</label>
+                    <select id="article-language" required>
+                        <option value="">选择语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
+                </div>
+                <button type="submit">添加文章</button>
+            </form>
+            
+            <div class="list-container">
+                <div class="export-container">
+                    <h2>文章列表</h2>
+                    <div>
+                        <select id="articleExportLanguage">
+                            <option value="all">全部语言</option>
+                            <option value="英语">英语</option>
+                            <option value="泰语">泰语</option>
+                            <option value="日语">日语</option>
+                            <option value="韩语">韩语</option>
+                            <option value="越南语">越南语</option>
+                            <option value="西班牙语">西班牙语</option>
+                            <option value="法语">法语</option>
+                            <option value="德语">德语</option>
+                        </select>
+                        <button id="exportArticlesCsv" class="btn-export">导出文章(CSV)</button>
+                    </div>
+                </div>
+                <div class="filter-container">
+                    <select id="article-filter">
+                        <option value="all">所有语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
+                </div>
+                <div id="articles-list"></div>
+            </div>
+        </div>
+        
+        <div id="study-tab" class="tab-content">
+            <h2>学习模式</h2>
+            <div class="form-group">
+                <label for="study-language">选择学习语言</label>
+                <select id="study-language">
+                    <option value="">选择语言</option>
+                    <option value="英语">英语</option>
+                    <option value="泰语">泰语</option>
+                    <option value="日语">日语</option>
+                    <option value="韩语">韩语</option>
+                    <option value="越南语">越南语</option>
+                    <option value="西班牙语">西班牙语</option>
+                    <option value="法语">法语</option>
+                    <option value="德语">德语</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="study-type">学习类型</label>
+                <select id="study-type">
+                    <option value="words">单词</option>
+                    <option value="articles">文章</option>
+                </select>
+            </div>
+            <button id="start-study">开始学习</button>
+            
+            <div id="study-content" class="list-container" style="display: none;">
+                <h2>学习内容</h2>
+                <div id="study-items"></div>
             </div>
         </div>
     </div>
     
-    <!-- 分享模态框 -->
-    <div id="share-modal" class="modal">
+    <!-- 编辑单词模态框 -->
+    <div id="edit-word-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-xl font-bold purple-text mb-4">分享文章</h2>
-            <p class="mb-4">复制下面的链接分享给朋友：</p>
-            <div class="bg-gray-100 p-3 rounded-lg mb-4 break-all" id="share-link"></div>
-            <button id="copy-link" class="btn-purple px-4 py-2 rounded-lg">
-                <i class="fas fa-copy mr-2"></i>复制链接
-            </button>
+            <div class="modal-header">
+                <h2>编辑单词</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="edit-word-form">
+                <input type="hidden" id="edit-word-id">
+                <div class="form-group">
+                    <label for="edit-word-text">单词</label>
+                    <input type="text" id="edit-word-text" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-word-translation">翻译</label>
+                    <input type="text" id="edit-word-translation" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-word-language">语言</label>
+                    <select id="edit-word-language" required>
+                        <option value="">选择语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-word-example">例句（可选）</label>
+                    <textarea id="edit-word-example"></textarea>
+                </div>
+                <button type="submit">保存修改</button>
+            </form>
         </div>
     </div>
     
-    <!-- 通知提示 -->
-    <div id="notification" class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-20">
-        <span id="notification-message"></span>
+    <!-- 编辑文章模态框 -->
+    <div id="edit-article-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>编辑文章</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="edit-article-form">
+                <input type="hidden" id="edit-article-id">
+                <div class="form-group">
+                    <label for="edit-article-title">标题</label>
+                    <input type="text" id="edit-article-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-article-content">内容</label>
+                    <textarea id="edit-article-content" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-article-language">语言</label>
+                    <select id="edit-article-language" required>
+                        <option value="">选择语言</option>
+                        <option value="英语">英语</option>
+                        <option value="泰语">泰语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="越南语">越南语</option>
+                        <option value="西班牙语">西班牙语</option>
+                        <option value="法语">法语</option>
+                        <option value="德语">德语</option>
+                    </select>
+                </div>
+                <button type="submit">保存修改</button>
+            </form>
+        </div>
     </div>
-
+    
+    <div id="notification" class="notification"></div>
+    
     <script>
-        // 语言代码到名称的映射
-        const languageNames = {
-            'en': '英语',
-            'zh': '中文',
-            'ja': '日语',
-            'ko': '韩语',
-            'fr': '法语',
-            'de': '德语',
-            'es': '西班牙语',
-            'th': '泰语',
-            'ru': '俄语',
-            'it': '意大利语',
-            'pt': '葡萄牙语',
-            'ar': '阿拉伯语',
-            'hi': '印地语',
-            'vi': '越南语',
-            'other': '其他'
-        };
-        
         // 初始化数据
         let words = JSON.parse(localStorage.getItem('words')) || [];
         let articles = JSON.parse(localStorage.getItem('articles')) || [];
-        let currentArticle = null;
-        let currentWordFilter = 'all';
-        let currentArticleLanguageFilter = 'all';
         
-        // DOM元素
-        const wordsTab = document.getElementById('words-tab');
-        const articlesTab = document.getElementById('articles-tab');
-        const settingsTab = document.getElementById('settings-tab');
-        const wordsContent = document.getElementById('words-content');
-        const articlesContent = document.getElementById('articles-content');
-        const settingsContent = document.getElementById('settings-content');
+        // DOM 元素
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const wordForm = document.getElementById('word-form');
+        const articleForm = document.getElementById('article-form');
         const wordsList = document.getElementById('words-list');
         const articlesList = document.getElementById('articles-list');
-        const articleReader = document.getElementById('article-reader');
-        const wordCount = document.getElementById('word-count');
-        const rememberedCount = document.getElementById('remembered-count');
-        const articleCount = document.getElementById('article-count');
-        const addWordForm = document.getElementById('add-word-form');
-        const addArticleForm = document.getElementById('add-article-form');
-        const wordFileUpload = document.getElementById('word-file-upload');
-        const articleFileUpload = document.getElementById('article-file-upload');
-        const uploadWordsBtn = document.getElementById('upload-words-btn');
-        const uploadArticlesBtn = document.getElementById('upload-articles-btn');
-        const shuffleWordsBtn = document.getElementById('shuffle-words');
-        const clearRememberedBtn = document.getElementById('clear-remembered');
-        const languageFilter = document.getElementById('language-filter');
-        const articleLanguageFilter = document.getElementById('article-language-filter');
-        const onlineAnnotation = document.getElementById('online-annotation');
-        const wordTooltip = document.getElementById('word-tooltip');
-        const tooltipContent = document.getElementById('tooltip-content');
-        const addTooltipWord = document.getElementById('add-tooltip-word');
-        const exportDataBtn = document.getElementById('export-data');
-        const importDataBtn = document.getElementById('import-data-btn');
-        const importData = document.getElementById('import-data');
-        const clearWordsBtn = document.getElementById('clear-words');
-        const clearArticlesBtn = document.getElementById('clear-articles');
-        const shareModal = document.getElementById('share-modal');
-        const shareLink = document.getElementById('share-link');
-        const copyLinkBtn = document.getElementById('copy-link');
+        const wordFilter = document.getElementById('word-filter');
+        const articleFilter = document.getElementById('article-filter');
+        const studyLanguage = document.getElementById('study-language');
+        const studyType = document.getElementById('study-type');
+        const startStudyBtn = document.getElementById('start-study');
+        const studyContent = document.getElementById('study-content');
+        const studyItems = document.getElementById('study-items');
         const notification = document.getElementById('notification');
-        const notificationMessage = document.getElementById('notification-message');
+        
+        // 导出相关元素
+        const wordExportLanguage = document.getElementById('wordExportLanguage');
+        const exportWordsCsv = document.getElementById('exportWordsCsv');
+        const articleExportLanguage = document.getElementById('articleExportLanguage');
+        const exportArticlesCsv = document.getElementById('exportArticlesCsv');
+        
+        // 编辑模态框元素
+        const editWordModal = document.getElementById('edit-word-modal');
+        const editArticleModal = document.getElementById('edit-article-modal');
+        const editWordForm = document.getElementById('edit-word-form');
+        const editArticleForm = document.getElementById('edit-article-form');
+        const closeButtons = document.querySelectorAll('.close');
         
         // 标签页切换
-        wordsTab.addEventListener('click', () => {
-            setActiveTab(wordsTab, wordsContent);
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
         });
         
-        articlesTab.addEventListener('click', () => {
-            setActiveTab(articlesTab, articlesContent);
-        });
-        
-        settingsTab.addEventListener('click', () => {
-            setActiveTab(settingsTab, settingsContent);
-        });
-        
-        function setActiveTab(tab, content) {
-            // 移除所有标签页的活动状态
-            document.querySelectorAll('.tab-active').forEach(t => {
-                t.classList.remove('tab-active');
-                t.classList.add('text-gray-500', 'hover:text-purple-600');
-            });
+        // 显示通知
+        function showNotification(message, duration = 3000) {
+            notification.textContent = message;
+            notification.style.display = 'block';
             
-            // 隐藏所有内容区域
-            document.querySelectorAll('.tab-content').forEach(c => {
-                c.classList.add('hidden');
-            });
-            
-            // 设置当前标签页为活动状态
-            tab.classList.add('tab-active');
-            tab.classList.remove('text-gray-500', 'hover:text-purple-600');
-            
-            // 显示当前内容区域
-            content.classList.remove('hidden');
-        }
-        
-        // 渲染单词列表
-        function renderWords() {
-            wordsList.innerHTML = '';
-            
-            let filteredWords = words;
-            if (currentWordFilter !== 'all') {
-                filteredWords = words.filter(word => word.language === currentWordFilter);
-            }
-            
-            if (filteredWords.length === 0) {
-                wordsList.innerHTML = '<div class="text-center text-gray-500 py-4">暂无单词，请添加新单词</div>';
-                wordCount.textContent = '共 0 个单词';
-                rememberedCount.textContent = '已记住 0 个';
-                return;
-            }
-            
-            filteredWords.forEach((word, index) => {
-                const wordCard = document.createElement('div');
-                wordCard.className = `word-card card bg-white p-4 ${word.remembered ? 'word-remembered' : ''}`;
-                
-                const languageBadge = document.createElement('span');
-                languageBadge.className = `language-badge lang-${word.language}`;
-                languageBadge.textContent = languageNames[word.language] || word.language;
-                
-                const wordText = document.createElement('div');
-                wordText.className = 'font-bold text-lg mb-1';
-                wordText.textContent = word.word;
-                
-                const wordTranslation = document.createElement('div');
-                wordTranslation.className = 'text-gray-700 mb-2';
-                wordTranslation.textContent = word.translation;
-                
-                const wordNotes = document.createElement('div');
-                wordNotes.className = 'text-sm text-gray-600 mb-2';
-                if (word.notes && word.notes.length > 0) {
-                    wordNotes.innerHTML = word.notes.map(note => `<div>• ${note}</div>`).join('');
-                }
-                
-                const wordExamples = document.createElement('div');
-                wordExamples.className = 'text-sm text-gray-600';
-                if (word.examples && word.examples.length > 0) {
-                    wordExamples.innerHTML = word.examples.map(example => 
-                        `<div class="mb-1"><span class="font-medium">${example.original}</span> - ${example.translation}</div>`
-                    ).join('');
-                }
-                
-                const actions = document.createElement('div');
-                actions.className = 'flex justify-end mt-3';
-                
-                const rememberBtn = document.createElement('button');
-                rememberBtn.className = `px-3 py-1 rounded-lg text-sm ${word.remembered ? 'bg-gray-200 text-gray-700' : 'bg-purple-100 text-purple-700'}`;
-                rememberBtn.innerHTML = word.remembered ? 
-                    '<i class="fas fa-check-circle mr-1"></i>已记住' : 
-                    '<i class="far fa-circle mr-1"></i>标记为已记住';
-                rememberBtn.addEventListener('click', () => toggleRemembered(index));
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'ml-2 px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm';
-                deleteBtn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i>删除';
-                deleteBtn.addEventListener('click', () => deleteWord(index));
-                
-                actions.appendChild(rememberBtn);
-                actions.appendChild(deleteBtn);
-                
-                wordCard.appendChild(languageBadge);
-                wordCard.appendChild(wordText);
-                wordCard.appendChild(wordTranslation);
-                if (word.notes && word.notes.length > 0) {
-                    wordCard.appendChild(wordNotes);
-                }
-                if (word.examples && word.examples.length > 0) {
-                    wordCard.appendChild(wordExamples);
-                }
-                wordCard.appendChild(actions);
-                
-                wordsList.appendChild(wordCard);
-            });
-            
-            // 更新计数
-            wordCount.textContent = `共 ${filteredWords.length} 个单词`;
-            const remembered = filteredWords.filter(word => word.remembered).length;
-            rememberedCount.textContent = `已记住 ${remembered} 个`;
-        }
-        
-        // 渲染文章列表
-        function renderArticles() {
-            articlesList.innerHTML = '';
-            
-            let filteredArticles = articles;
-            if (currentArticleLanguageFilter !== 'all') {
-                filteredArticles = articles.filter(article => article.language === currentArticleLanguageFilter);
-            }
-            
-            if (filteredArticles.length === 0) {
-                articlesList.innerHTML = '<div class="text-center text-gray-500 py-4">暂无文章，请添加新文章</div>';
-                articleCount.textContent = '共 0 篇文章';
-                return;
-            }
-            
-            filteredArticles.forEach((article, index) => {
-                const articleCard = document.createElement('div');
-                articleCard.className = 'card bg-white p-4 cursor-pointer hover:bg-purple-50';
-                
-                const languageBadge = document.createElement('span');
-                languageBadge.className = `language-badge lang-${article.language}`;
-                languageBadge.textContent = languageNames[article.language] || article.language;
-                
-                const articleTitle = document.createElement('div');
-                articleTitle.className = 'font-bold text-lg mb-1';
-                articleTitle.textContent = article.title;
-                
-                const articlePreview = document.createElement('div');
-                articlePreview.className = 'text-sm text-gray-600 truncate';
-                articlePreview.textContent = article.content.substring(0, 50) + (article.content.length > 50 ? '...' : '');
-                
-                articleCard.appendChild(languageBadge);
-                articleCard.appendChild(articleTitle);
-                articleCard.appendChild(articlePreview);
-                
-                articleCard.addEventListener('click', () => readArticle(index));
-                
-                articlesList.appendChild(articleCard);
-            });
-            
-            // 更新计数
-            articleCount.textContent = `共 ${filteredArticles.length} 篇文章`;
-        }
-        
-        // 阅读文章
-        function readArticle(index) {
-            currentArticle = articles[index];
-            
-            articleReader.innerHTML = '';
-            
-            const articleHeader = document.createElement('div');
-            articleHeader.className = 'mb-6 pb-4 border-b';
-            
-            const articleTitle = document.createElement('h2');
-            articleTitle.className = 'text-2xl font-bold purple-text mb-2';
-            articleTitle.textContent = currentArticle.title;
-            
-            const articleMeta = document.createElement('div');
-            articleMeta.className = 'flex items-center text-gray-600';
-            
-            const languageBadge = document.createElement('span');
-            languageBadge.className = `language-badge lang-${currentArticle.language}`;
-            languageBadge.textContent = languageNames[currentArticle.language] || currentArticle.language;
-            
-            const shareButton = document.createElement('div');
-            shareButton.className = 'share-button';
-            shareButton.innerHTML = '<i class="fas fa-share-alt text-purple-600"></i>';
-            shareButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                shareArticle(index);
-            });
-            
-            articleMeta.appendChild(languageBadge);
-            articleHeader.appendChild(articleTitle);
-            articleHeader.appendChild(articleMeta);
-            articleReader.appendChild(articleHeader);
-            articleReader.appendChild(shareButton);
-            
-            const articleContent = document.createElement('div');
-            articleContent.className = 'text-gray-700 leading-relaxed';
-            
-            // 将文章内容按句子分割，并为每个单词添加点击事件
-            const sentences = currentArticle.content.split(/[.!?。！？]/);
-            sentences.forEach(sentence => {
-                if (sentence.trim() === '') return;
-                
-                const sentenceElement = document.createElement('p');
-                sentenceElement.className = 'mb-4';
-                
-                // 将句子按单词分割，并为每个单词添加点击事件
-                const words = sentence.split(/(\s+)/);
-                words.forEach(word => {
-                    if (word.trim() === '') {
-                        sentenceElement.appendChild(document.createTextNode(word));
-                        return;
-                    }
-                    
-                    const wordElement = document.createElement('span');
-                    wordElement.className = 'word-in-text';
-                    wordElement.textContent = word;
-                    
-                    wordElement.addEventListener('click', () => {
-                        if (onlineAnnotation.checked) {
-                            showWordTooltip(word, wordElement);
-                        }
-                    });
-                    
-                    sentenceElement.appendChild(wordElement);
-                });
-                
-                articleContent.appendChild(sentenceElement);
-            });
-            
-            articleReader.appendChild(articleContent);
-        }
-        
-        // 显示单词提示
-        function showWordTooltip(word, element) {
-            // 清理单词，去除标点符号
-            const cleanWord = word.replace(/[^\w\s]/gi, '');
-            
-            if (cleanWord.length === 0) return;
-            
-            // 获取元素位置
-            const rect = element.getBoundingClientRect();
-            
-            // 设置提示框位置
-            wordTooltip.style.left = `${rect.left}px`;
-            wordTooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
-            
-            // 显示加载动画
-            tooltipContent.innerHTML = '<div class="loading-spinner"></div> 查询中...';
-            wordTooltip.classList.remove('hidden');
-            
-            // 模拟API调用（实际应用中应替换为真实的API调用）
             setTimeout(() => {
-                // 这里应该是真实的API调用，例如使用百度翻译API
-                // 由于这是演示，我们使用模拟数据
-                const mockData = {
-                    translation: '这是一个模拟的翻译结果',
-                    definition: '这是单词的定义或解释',
-                    examples: [
-                        { original: '这是一个例句', translation: 'This is an example sentence' }
-                    ]
-                };
-                
-                // 显示查询结果
-                tooltipContent.innerHTML = `
-                    <div class="font-bold text-lg mb-2">${cleanWord}</div>
-                    <div class="mb-2"><span class="font-medium">翻译：</span>${mockData.translation}</div>
-                    <div class="mb-2"><span class="font-medium">解释：</span>${mockData.definition}</div>
-                    <div class="text-sm">
-                        <div class="font-medium mb-1">例句：</div>
-                        <div>${mockData.examples[0].original}</div>
-                        <div class="text-gray-600">${mockData.examples[0].translation}</div>
-                    </div>
-                `;
-                
-                // 设置添加单词按钮的数据
-                addTooltipWord.dataset.word = cleanWord;
-                addTooltipWord.dataset.translation = mockData.translation;
-                addTooltipWord.dataset.language = currentArticle.language;
-            }, 1000);
+                notification.style.display = 'none';
+            }, duration);
         }
-        
-        // 添加提示框中的单词到单词库
-        addTooltipWord.addEventListener('click', () => {
-            const word = addTooltipWord.dataset.word;
-            const translation = addTooltipWord.dataset.translation;
-            const language = addTooltipWord.dataset.language;
-            
-            // 检查单词是否已存在
-            const existingWordIndex = words.findIndex(w => 
-                w.word.toLowerCase() === word.toLowerCase() && w.language === language
-            );
-            
-            if (existingWordIndex !== -1) {
-                showNotification('该单词已存在于单词库中');
-                return;
-            }
-            
-            // 添加新单词
-            words.push({
-                language,
-                word,
-                translation,
-                notes: [],
-                examples: [],
-                remembered: false
-            });
-            
-            // 保存到本地存储
-            localStorage.setItem('words', JSON.stringify(words));
-            
-            // 更新单词列表
-            renderWords();
-            
-            // 隐藏提示框
-            wordTooltip.classList.add('hidden');
-            
-            // 显示通知
-            showNotification('单词已添加到单词库');
-        });
-        
-        // 分享文章
-        function shareArticle(index) {
-            const article = articles[index];
-            const shareUrl = `${window.location.origin}${window.location.pathname}?article=${index}`;
-            
-            shareLink.textContent = shareUrl;
-            shareModal.style.display = 'block';
-        }
-        
-        // 复制分享链接
-        copyLinkBtn.addEventListener('click', () => {
-            const textArea = document.createElement('textarea');
-            textArea.value = shareLink.textContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            showNotification('链接已复制到剪贴板');
-            shareModal.style.display = 'none';
-        });
-        
-        // 关闭模态框
-        document.querySelector('.close').addEventListener('click', () => {
-            shareModal.style.display = 'none';
-        });
-        
-        window.addEventListener('click', (event) => {
-            if (event.target === shareModal) {
-                shareModal.style.display = 'none';
-            }
-        });
         
         // 添加单词
-        addWordForm.addEventListener('submit', (e) => {
+        wordForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const language = document.getElementById('word-language').value;
-            const word = document.getElementById('word-text').value.trim();
-            const translation = document.getElementById('word-translation').value.trim();
-            const notesText = document.getElementById('word-notes').value.trim();
-            const exampleOriginal = document.getElementById('word-example-original').value.trim();
-            const exampleTranslation = document.getElementById('word-example-translation').value.trim();
+            const word = {
+                id: Date.now(),
+                text: document.getElementById('word-text').value,
+                translation: document.getElementById('word-translation').value,
+                language: document.getElementById('word-language').value,
+                example: document.getElementById('word-example').value,
+                dateAdded: new Date().toLocaleString()
+            };
             
-            if (!word || !translation) {
-                showNotification('请填写单词和中文意思');
-                return;
-            }
-            
-            // 检查单词是否已存在
-            const existingWordIndex = words.findIndex(w => 
-                w.word.toLowerCase() === word.toLowerCase() && w.language === language
-            );
-            
-            if (existingWordIndex !== -1) {
-                showNotification('该单词已存在于单词库中');
-                return;
-            }
-            
-            // 处理注释
-            const notes = notesText ? notesText.split('\n').filter(note => note.trim() !== '') : [];
-            
-            // 处理例句
-            const examples = [];
-            if (exampleOriginal && exampleTranslation) {
-                examples.push({
-                    original: exampleOriginal,
-                    translation: exampleTranslation
-                });
-            }
-            
-            // 添加新单词
-            words.push({
-                language,
-                word,
-                translation,
-                notes,
-                examples,
-                remembered: false
-            });
-            
-            // 保存到本地存储
+            words.push(word);
             localStorage.setItem('words', JSON.stringify(words));
             
-            // 更新单词列表
+            wordForm.reset();
             renderWords();
-            
-            // 重置表单
-            addWordForm.reset();
-            
-            // 显示通知
-            showNotification('单词添加成功');
+            showNotification('单词添加成功！');
         });
         
         // 添加文章
-        addArticleForm.addEventListener('submit', (e) => {
+        articleForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const language = document.getElementById('article-language').value;
-            const title = document.getElementById('article-title').value.trim();
-            const content = document.getElementById('article-content').value.trim();
+            const article = {
+                id: Date.now(),
+                title: document.getElementById('article-title').value,
+                content: document.getElementById('article-content').value,
+                language: document.getElementById('article-language').value,
+                dateAdded: new Date().toLocaleString()
+            };
             
-            if (!title || !content) {
-                showNotification('请填写标题和内容');
-                return;
-            }
-            
-            // 添加新文章
-            articles.push({
-                language,
-                title,
-                content
-            });
-            
-            // 保存到本地存储
+            articles.push(article);
             localStorage.setItem('articles', JSON.stringify(articles));
             
-            // 更新文章列表
+            articleForm.reset();
             renderArticles();
-            
-            // 重置表单
-            addArticleForm.reset();
-            
-            // 显示通知
-            showNotification('文章添加成功');
+            showNotification('文章添加成功！');
         });
         
-        // 上传单词文件
-        uploadWordsBtn.addEventListener('click', () => {
-            const file = wordFileUpload.files[0];
-            if (!file) {
-                showNotification('请选择要上传的文件');
+        // 渲染单词列表
+        function renderWords(filter = 'all') {
+            wordsList.innerHTML = '';
+            
+            const filteredWords = filter === 'all' 
+                ? words 
+                : words.filter(word => word.language === filter);
+            
+            if (filteredWords.length === 0) {
+                wordsList.innerHTML = '<p>没有找到单词</p>';
                 return;
             }
             
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const content = e.target.result;
-                    const lines = content.split('\n');
-                    let addedCount = 0;
-                    
-                    lines.forEach(line => {
-                        if (line.trim() === '') return;
-                        
-                        const parts = line.split('|');
-                        if (parts.length < 3) return;
-                        
-                        const language = parts[0].trim();
-                        const word = parts[1].trim();
-                        const translation = parts[2].trim();
-                        
-                        // 检查单词是否已存在
-                        const existingWordIndex = words.findIndex(w => 
-                            w.word.toLowerCase() === word.toLowerCase() && w.language === language
-                        );
-                        
-                        if (existingWordIndex !== -1) return;
-                        
-                        // 处理注释
-                        const notes = [];
-                        let examples = [];
-                        
-                        // 解析注释和例句
-                        let i = 3;
-                        while (i < parts.length && !parts[i].includes('（') && !parts[i].includes('(')) {
-                            if (parts[i].trim() !== '') {
-                                notes.push(parts[i].trim());
-                            }
-                            i++;
-                        }
-                        
-                        // 解析例句
-                        while (i < parts.length - 1) {
-                            const original = parts[i].trim();
-                            const translation = parts[i + 1].trim();
-                            
-                            if (original && translation) {
-                                examples.push({
-                                    original,
-                                    translation
-                                });
-                            }
-                            
-                            i += 2;
-                        }
-                        
-                        // 添加新单词
-                        words.push({
-                            language,
-                            word,
-                            translation,
-                            notes,
-                            examples,
-                            remembered: false
-                        });
-                        
-                        addedCount++;
-                    });
-                    
-                    // 保存到本地存储
-                    localStorage.setItem('words', JSON.stringify(words));
-                    
-                    // 更新单词列表
-                    renderWords();
-                    
-                    // 重置文件输入
-                    wordFileUpload.value = '';
-                    
-                    // 显示通知
-                    showNotification(`成功添加 ${addedCount} 个单词`);
-                } catch (error) {
-                    showNotification('文件格式错误，请检查文件内容');
-                    console.error(error);
-                }
-            };
-            
-            reader.readAsText(file, 'UTF-8');
-        });
-        
-        // 上传文章文件
-        uploadArticlesBtn.addEventListener('click', () => {
-            const file = articleFileUpload.files[0];
-            if (!file) {
-                showNotification('请选择要上传的文件');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const content = e.target.result;
-                    const articleBlocks = content.split('---');
-                    let addedCount = 0;
-                    
-                    articleBlocks.forEach(block => {
-                        if (block.trim() === '') return;
-                        
-                        const lines = block.trim().split('\n');
-                        if (lines.length < 2) return;
-                        
-                        // 解析语言和标题
-                        const titleLine = lines[0].trim();
-                        const titleParts = titleLine.split('|');
-                        
-                        if (titleParts.length < 2) return;
-                        
-                        const language = titleParts[0].trim();
-                        const title = titleParts[1].trim();
-                        
-                        // 解析内容
-                        const contentLines = lines.slice(1);
-                        const content = contentLines.join('\n').trim();
-                        
-                        if (!title || !content) return;
-                        
-                        // 添加新文章
-                        articles.push({
-                            language,
-                            title,
-                            content
-                        });
-                        
-                        addedCount++;
-                    });
-                    
-                    // 保存到本地存储
-                    localStorage.setItem('articles', JSON.stringify(articles));
-                    
-                    // 更新文章列表
-                    renderArticles();
-                    
-                    // 重置文件输入
-                    articleFileUpload.value = '';
-                    
-                    // 显示通知
-                    showNotification(`成功添加 ${addedCount} 篇文章`);
-                } catch (error) {
-                    showNotification('文件格式错误，请检查文件内容');
-                    console.error(error);
-                }
-            };
-            
-            reader.readAsText(file, 'UTF-8');
-        });
-        
-        // 乱序单词
-        shuffleWordsBtn.addEventListener('click', () => {
-            // Fisher-Yates 洗牌算法
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]];
-            }
-            
-            // 保存到本地存储
-            localStorage.setItem('words', JSON.stringify(words));
-            
-            // 更新单词列表
-            renderWords();
-            
-            // 显示通知
-            showNotification('单词顺序已打乱');
-        });
-        
-        // 清除已记住标记
-        clearRememberedBtn.addEventListener('click', () => {
-            words.forEach(word => {
-                word.remembered = false;
+            filteredWords.forEach(word => {
+                const wordItem = document.createElement('div');
+                wordItem.className = 'list-item';
+                
+                wordItem.innerHTML = `
+                    <h3>${word.text}</h3>
+                    <div class="meta">翻译: ${word.translation} | 语言: ${word.language}</div>
+                    ${word.example ? `<p><strong>例句:</strong> ${word.example}</p>` : ''}
+                    <div class="actions">
+                        <button class="btn-edit" data-id="${word.id}">编辑</button>
+                        <button class="btn-delete" data-id="${word.id}">删除</button>
+                    </div>
+                `;
+                
+                wordsList.appendChild(wordItem);
             });
             
-            // 保存到本地存储
-            localStorage.setItem('words', JSON.stringify(words));
+            // 添加编辑和删除事件监听
+            document.querySelectorAll('#words-list .btn-edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const wordId = parseInt(e.target.getAttribute('data-id'));
+                    editWord(wordId);
+                });
+            });
             
-            // 更新单词列表
-            renderWords();
-            
-            // 显示通知
-            showNotification('已清除所有已记住标记');
-        });
+            document.querySelectorAll('#words-list .btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const wordId = parseInt(e.target.getAttribute('data-id'));
+                    deleteWord(wordId);
+                });
+            });
+        }
         
-        // 语言筛选
-        languageFilter.addEventListener('change', (e) => {
-            currentWordFilter = e.target.value;
-            renderWords();
-        });
-        
-        articleLanguageFilter.addEventListener('change', (e) => {
-            currentArticleLanguageFilter = e.target.value;
-            renderArticles();
-        });
-        
-        // 切换联网注释模式
-        onlineAnnotation.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                e.target.nextElementSibling.classList.add('bg-purple-600');
-                e.target.nextElementSibling.classList.remove('bg-gray-300');
-                e.target.nextElementSibling.querySelector('.dot').style.transform = 'translateX(24px)';
-            } else {
-                e.target.nextElementSibling.classList.remove('bg-purple-600');
-                e.target.nextElementSibling.classList.add('bg-gray-300');
-                e.target.nextElementSibling.querySelector('.dot').style.transform = 'translateX(0)';
-            }
-        });
-        
-        // 导出数据
-        exportDataBtn.addEventListener('click', () => {
-            const data = {
-                words,
-                articles,
-                exportDate: new Date().toISOString()
-            };
+        // 渲染文章列表
+        function renderArticles(filter = 'all') {
+            articlesList.innerHTML = '';
             
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const filteredArticles = filter === 'all' 
+                ? articles 
+                : articles.filter(article => article.language === filter);
             
-            const exportFileDefaultName = `language-learning-data-${new Date().toISOString().slice(0, 10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showNotification('数据导出成功');
-        });
-        
-        // 导入数据
-        importDataBtn.addEventListener('click', () => {
-            const file = importData.files[0];
-            if (!file) {
-                showNotification('请选择要导入的文件');
+            if (filteredArticles.length === 0) {
+                articlesList.innerHTML = '<p>没有找到文章</p>';
                 return;
             }
             
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (data.words && Array.isArray(data.words)) {
-                        words = data.words;
-                        localStorage.setItem('words', JSON.stringify(words));
-                    }
-                    
-                    if (data.articles && Array.isArray(data.articles)) {
-                        articles = data.articles;
-                        localStorage.setItem('articles', JSON.stringify(articles));
-                    }
-                    
-                    // 更新列表
-                    renderWords();
-                    renderArticles();
-                    
-                    // 重置文件输入
-                    importData.value = '';
-                    
-                    // 显示通知
-                    showNotification('数据导入成功');
-                } catch (error) {
-                    showNotification('文件格式错误，请检查文件内容');
-                    console.error(error);
-                }
-            };
+            filteredArticles.forEach(article => {
+                const articleItem = document.createElement('div');
+                articleItem.className = 'list-item';
+                
+                articleItem.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <div class="meta">语言: ${article.language}</div>
+                    <p>${article.content}</p>
+                    <div class="actions">
+                        <button class="btn-edit" data-id="${article.id}">编辑</button>
+                        <button class="btn-delete" data-id="${article.id}">删除</button>
+                    </div>
+                `;
+                
+                articlesList.appendChild(articleItem);
+            });
             
-            reader.readAsText(file, 'UTF-8');
-        });
-        
-        // 清除单词
-        clearWordsBtn.addEventListener('click', () => {
-            if (confirm('确定要清除所有单词吗？此操作不可恢复。')) {
-                words = [];
-                localStorage.setItem('words', JSON.stringify(words));
-                renderWords();
-                showNotification('所有单词已清除');
-            }
-        });
-        
-        // 清除文章
-        clearArticlesBtn.addEventListener('click', () => {
-            if (confirm('确定要清除所有文章吗？此操作不可恢复。')) {
-                articles = [];
-                localStorage.setItem('articles', JSON.stringify(articles));
-                renderArticles();
-                showNotification('所有文章已清除');
-            }
-        });
-        
-        // 切换单词记住状态
-        function toggleRemembered(index) {
-            words[index].remembered = !words[index].remembered;
-            localStorage.setItem('words', JSON.stringify(words));
-            renderWords();
+            // 添加编辑和删除事件监听
+            document.querySelectorAll('#articles-list .btn-edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const articleId = parseInt(e.target.getAttribute('data-id'));
+                    editArticle(articleId);
+                });
+            });
+            
+            document.querySelectorAll('#articles-list .btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const articleId = parseInt(e.target.getAttribute('data-id'));
+                    deleteArticle(articleId);
+                });
+            });
         }
         
-        // 删除单词
-        function deleteWord(index) {
-            if (confirm('确定要删除这个单词吗？')) {
-                words.splice(index, 1);
+        // 编辑单词
+        function editWord(id) {
+            const word = words.find(w => w.id === id);
+            if (!word) return;
+            
+            document.getElementById('edit-word-id').value = word.id;
+            document.getElementById('edit-word-text').value = word.text;
+            document.getElementById('edit-word-translation').value = word.translation;
+            document.getElementById('edit-word-language').value = word.language;
+            document.getElementById('edit-word-example').value = word.example || '';
+            
+            editWordModal.style.display = 'flex';
+        }
+        
+        // 编辑文章
+        function editArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            document.getElementById('edit-article-id').value = article.id;
+            document.getElementById('edit-article-title').value = article.title;
+            document.getElementById('edit-article-content').value = article.content;
+            document.getElementById('edit-article-language').value = article.language;
+            
+            editArticleModal.style.display = 'flex';
+        }
+        
+        // 保存编辑的单词
+        editWordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('edit-word-id').value);
+            const wordIndex = words.findIndex(w => w.id === id);
+            
+            if (wordIndex !== -1) {
+                words[wordIndex] = {
+                    ...words[wordIndex],
+                    text: document.getElementById('edit-word-text').value,
+                    translation: document.getElementById('edit-word-translation').value,
+                    language: document.getElementById('edit-word-language').value,
+                    example: document.getElementById('edit-word-example').value
+                };
+                
                 localStorage.setItem('words', JSON.stringify(words));
-                renderWords();
+                renderWords(wordFilter.value);
+                editWordModal.style.display = 'none';
+                showNotification('单词修改成功！');
+            }
+        });
+        
+        // 保存编辑的文章
+        editArticleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('edit-article-id').value);
+            const articleIndex = articles.findIndex(a => a.id === id);
+            
+            if (articleIndex !== -1) {
+                articles[articleIndex] = {
+                    ...articles[articleIndex],
+                    title: document.getElementById('edit-article-title').value,
+                    content: document.getElementById('edit-article-content').value,
+                    language: document.getElementById('edit-article-language').value
+                };
+                
+                localStorage.setItem('articles', JSON.stringify(articles));
+                renderArticles(articleFilter.value);
+                editArticleModal.style.display = 'none';
+                showNotification('文章修改成功！');
+            }
+        });
+        
+        // 删除单词
+        function deleteWord(id) {
+            if (confirm('确定要删除这个单词吗？')) {
+                words = words.filter(word => word.id !== id);
+                localStorage.setItem('words', JSON.stringify(words));
+                renderWords(wordFilter.value);
                 showNotification('单词已删除');
             }
         }
         
-        // 显示通知
-        function showNotification(message) {
-            notificationMessage.textContent = message;
-            notification.classList.remove('translate-y-20');
-            
-            setTimeout(() => {
-                notification.classList.add('translate-y-20');
-            }, 3000);
+        // 删除文章
+        function deleteArticle(id) {
+            if (confirm('确定要删除这篇文章吗？')) {
+                articles = articles.filter(article => article.id !== id);
+                localStorage.setItem('articles', JSON.stringify(articles));
+                renderArticles(articleFilter.value);
+                showNotification('文章已删除');
+            }
         }
         
-        // 检查URL参数中是否有文章索引
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleIndex = urlParams.get('article');
+        // 筛选单词
+        wordFilter.addEventListener('change', () => {
+            renderWords(wordFilter.value);
+        });
         
-        if (articleIndex !== null && !isNaN(articleIndex) && articles.length > parseInt(articleIndex)) {
-            // 切换到文章标签页
-            setActiveTab(articlesTab, articlesContent);
+        // 筛选文章
+        articleFilter.addEventListener('change', () => {
+            renderArticles(articleFilter.value);
+        });
+        
+        // 开始学习
+        startStudyBtn.addEventListener('click', () => {
+            const language = studyLanguage.value;
+            const type = studyType.value;
             
-            // 延迟一下以确保DOM已更新
-            setTimeout(() => {
-                readArticle(parseInt(articleIndex));
-            }, 100);
+            if (!language) {
+                showNotification('请选择学习语言');
+                return;
+            }
+            
+            studyContent.style.display = 'block';
+            studyItems.innerHTML = '';
+            
+            if (type === 'words') {
+                const filteredWords = words.filter(word => word.language === language);
+                
+                if (filteredWords.length === 0) {
+                    studyItems.innerHTML = '<p>没有找到该语言的单词</p>';
+                    return;
+                }
+                
+                // 随机排序
+                const shuffledWords = [...filteredWords].sort(() => Math.random() - 0.5);
+                
+                shuffledWords.forEach(word => {
+                    const wordItem = document.createElement('div');
+                    wordItem.className = 'list-item';
+                    wordItem.innerHTML = `
+                        <h3>${word.text}</h3>
+                        <div class="meta">翻译: ${word.translation}</div>
+                        ${word.example ? `<p><strong>例句:</strong> ${word.example}</p>` : ''}
+                    `;
+                    studyItems.appendChild(wordItem);
+                });
+            } else {
+                const filteredArticles = articles.filter(article => article.language === language);
+                
+                if (filteredArticles.length === 0) {
+                    studyItems.innerHTML = '<p>没有找到该语言的文章</p>';
+                    return;
+                }
+                
+                // 随机排序
+                const shuffledArticles = [...filteredArticles].sort(() => Math.random() - 0.5);
+                
+                shuffledArticles.forEach(article => {
+                    const articleItem = document.createElement('div');
+                    articleItem.className = 'list-item';
+                    articleItem.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.content}</p>
+                    `;
+                    studyItems.appendChild(articleItem);
+                });
+            }
+        });
+        
+        // 导出单词为CSV
+        exportWordsCsv.addEventListener('click', function() {
+            const selectedLanguage = wordExportLanguage.value;
+            exportWordsToCsv(selectedLanguage);
+        });
+        
+        // 导出文章为CSV
+        exportArticlesCsv.addEventListener('click', function() {
+            const selectedLanguage = articleExportLanguage.value;
+            exportArticlesToCsv(selectedLanguage);
+        });
+        
+        // 导出单词为CSV函数
+        function exportWordsToCsv(language) {
+            let wordsToExport = words;
+            
+            // 按语言筛选
+            if (language !== 'all') {
+                wordsToExport = words.filter(word => word.language === language);
+            }
+            
+            if (wordsToExport.length === 0) {
+                showNotification('没有可导出的单词！');
+                return;
+            }
+            
+            // 创建CSV内容
+            let csvContent = "单词,翻译,语言,例句,添加日期\n";
+            
+            wordsToExport.forEach(word => {
+                // 处理逗号和换行符，避免破坏CSV格式
+                const escapedWord = `"${word.text.replace(/"/g, '""')}"`;
+                const escapedTranslation = `"${word.translation.replace(/"/g, '""')}"`;
+                const escapedLanguage = `"${word.language.replace(/"/g, '""')}"`;
+                const escapedExample = `"${(word.example || '').replace(/"/g, '""')}"`;
+                const escapedDate = `"${word.dateAdded.replace(/"/g, '""')}"`;
+                
+                csvContent += `${escapedWord},${escapedTranslation},${escapedLanguage},${escapedExample},${escapedDate}\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `单词列表_${language === 'all' ? '全部语言' : language}_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification(`单词已导出为CSV格式！`);
         }
         
-        // 初始化页面
+        // 导出文章为CSV函数
+        function exportArticlesToCsv(language) {
+            let articlesToExport = articles;
+            
+            // 按语言筛选
+            if (language !== 'all') {
+                articlesToExport = articles.filter(article => article.language === language);
+            }
+            
+            if (articlesToExport.length === 0) {
+                showNotification('没有可导出的文章！');
+                return;
+            }
+            
+            // 创建CSV内容
+            let csvContent = "标题,内容,语言,添加日期\n";
+            
+            articlesToExport.forEach(article => {
+                // 处理逗号和换行符，避免破坏CSV格式
+                const escapedTitle = `"${article.title.replace(/"/g, '""')}"`;
+                const escapedContent = `"${article.content.replace(/"/g, '""')}"`;
+                const escapedLanguage = `"${article.language.replace(/"/g, '""')}"`;
+                const escapedDate = `"${article.dateAdded.replace(/"/g, '""')}"`;
+                
+                csvContent += `${escapedTitle},${escapedContent},${escapedLanguage},${escapedDate}\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `文章列表_${language === 'all' ? '全部语言' : language}_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification(`文章已导出为CSV格式！`);
+        }
+        
+        // 关闭模态框
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                editWordModal.style.display = 'none';
+                editArticleModal.style.display = 'none';
+            });
+        });
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === editWordModal) {
+                editWordModal.style.display = 'none';
+            }
+            if (e.target === editArticleModal) {
+                editArticleModal.style.display = 'none';
+            }
+        });
+        
+        // 初始化渲染
         renderWords();
         renderArticles();
     </script>
