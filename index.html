@@ -3,1058 +3,1304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多语种学习工具</title>
+    <title>多语言单词学习工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #4A148C;
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Quicksand', sans-serif;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(138, 43, 226, 0.2);
-            padding: 30px;
-            background: linear-gradient(to bottom right, #ffffff, #f8f0fc);
-            border: 2px solid #e1bee7;
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #ce93d8;
+        .card-bg {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
-        
-        h1 {
-            color: #8A2BE2;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(138, 43, 226, 0.3);
-        }
-        
-        h2, h3 {
-            color: #9C27B0;
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ce93d8;
-        }
-        
-        .tab {
-            padding: 12px 24px;
-            cursor: pointer;
-            background: linear-gradient(to bottom, #f3e5f5, #e1bee7);
-            border: 1px solid #ce93d8;
-            border-bottom: none;
-            border-radius: 8px 8px 0 0;
-            margin-right: 5px;
-            font-weight: 600;
-            color: #6A1B9A;
-            transition: all 0.3s ease;
-        }
-        
-        .tab:hover {
-            background: linear-gradient(to bottom, #e1bee7, #ce93d8);
-            color: #4A148C;
-        }
-        
-        .tab.active {
-            background: linear-gradient(to bottom, #ffffff, #f3e5f5);
-            border-bottom: 2px solid white;
-            margin-bottom: -2px;
-            color: #8A2BE2;
-            box-shadow: 0 -2px 5px rgba(138, 43, 226, 0.1);
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 25px;
-            border: 1px solid #ce93d8;
-            border-top: none;
-            border-radius: 0 0 10px 10px;
-            background-color: #fafafa;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 18px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #6A1B9A;
-        }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ce93d8;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background-color: #fafafa;
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            border-color: #8A2BE2;
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(138, 43, 226, 0.25);
-            background-color: white;
-        }
-        
-        textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        
-        button {
-            background: linear-gradient(to bottom, #9C27B0, #7B1FA2);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(156, 39, 176, 0.3);
-        }
-        
-        button:hover {
-            background: linear-gradient(to bottom, #AB47BC, #8E24AA);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(156, 39, 176, 0.4);
-        }
-        
-        .btn-edit {
-            background: linear-gradient(to bottom, #FF69B4, #E91E63);
-            margin-right: 5px;
-            padding: 6px 12px;
-            font-size: 14px;
-        }
-        
-        .btn-edit:hover {
-            background: linear-gradient(to bottom, #FF4081, #C2185B);
-        }
-        
-        .btn-delete {
-            background: linear-gradient(to bottom, #F44336, #D32F2F);
-            padding: 6px 12px;
-            font-size: 14px;
-        }
-        
-        .btn-delete:hover {
-            background: linear-gradient(to bottom, #E53935, #C62828);
-        }
-        
-        .btn-export {
-            background: linear-gradient(to bottom, #673AB7, #512DA8);
-            margin-left: 10px;
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-        
-        .btn-export:hover {
-            background: linear-gradient(to bottom, #5E35B1, #4527A0);
-        }
-        
-        .list-container {
-            margin-top: 30px;
-        }
-        
-        .list-item {
-            background: linear-gradient(to bottom right, #ffffff, #f3e5f5);
-            border: 1px solid #e1bee7;
-            border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 15px;
+        .nav-item {
             position: relative;
-            box-shadow: 0 2px 5px rgba(138, 43, 226, 0.1);
-            transition: all 0.3s ease;
         }
-        
-        .list-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.2);
-            border-color: #ce93d8;
-        }
-        
-        .list-item h3 {
-            margin-bottom: 10px;
-            color: #8A2BE2;
-            font-size: 1.3rem;
-        }
-        
-        .list-item .meta {
-            color: #9C27B0;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        
-        .list-item .actions {
+        .nav-item::after {
+            content: '';
             position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
+            bottom: -2px;
             left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        .nav-item:hover::after, .nav-item.active::after {
             width: 100%;
-            height: 100%;
-            background-color: rgba(138, 43, 226, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
         }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
-            border: 2px solid #e1bee7;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e1bee7;
-        }
-        
-        .close {
-            font-size: 28px;
-            cursor: pointer;
-            color: #9C27B0;
-            transition: color 0.3s;
-        }
-        
-        .close:hover {
-            color: #6A1B9A;
-        }
-        
-        .filter-container {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .filter-container select {
-            flex: 1;
-        }
-        
-        .export-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(to right, #f3e5f5, #e1bee7);
-            border-radius: 8px;
-            border: 1px solid #ce93d8;
-        }
-        
-        .export-container select {
-            width: auto;
-            min-width: 150px;
-            margin-right: 10px;
-        }
-        
-        .notification {
+        .toast {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            background: linear-gradient(to right, #9C27B0, #E91E63);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 15px 25px;
+            padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
-            z-index: 1001;
-            display: none;
-            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .tabs {
-                flex-wrap: wrap;
-            }
-            
-            .tab {
-                margin-bottom: 5px;
-                flex-grow: 1;
-                text-align: center;
-            }
-            
-            .list-item .actions {
-                position: static;
-                margin-top: 10px;
-                display: flex;
-                justify-content: flex-end;
-            }
-            
-            .export-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .export-container select, .export-container button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>多语种学习工具</h1>
-            <p>添加、管理和学习多种语言的单词和文章</p>
+<body class="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">多语言单词学习工具</h1>
+            <p class="text-gray-600">管理和学习多种语言的单词和文章</p>
         </header>
-        
-        <div class="tabs">
-            <div class="tab active" data-tab="words">单词管理</div>
-            <div class="tab" data-tab="articles">文章管理</div>
-            <div class="tab" data-tab="study">学习模式</div>
-        </div>
-        
-        <div id="words-tab" class="tab-content active">
-            <h2>添加新单词</h2>
-            <form id="word-form">
-                <div class="form-group">
-                    <label for="word-text">单词</label>
-                    <input type="text" id="word-text" required>
-                </div>
-                <div class="form-group">
-                    <label for="word-translation">翻译</label>
-                    <input type="text" id="word-translation" required>
-                </div>
-                <div class="form-group">
-                    <label for="word-language">语言</label>
-                    <select id="word-language" required>
-                        <option value="">选择语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="word-example">例句（可选）</label>
-                    <textarea id="word-example"></textarea>
-                </div>
-                <button type="submit">添加单词</button>
-            </form>
-            
-            <div class="list-container">
-                <div class="export-container">
-                    <h2>单词列表</h2>
-                    <div>
-                        <select id="wordExportLanguage">
-                            <option value="all">全部语言</option>
-                            <option value="英语">英语</option>
-                            <option value="泰语">泰语</option>
-                            <option value="日语">日语</option>
-                            <option value="韩语">韩语</option>
-                            <option value="越南语">越南语</option>
-                            <option value="西班牙语">西班牙语</option>
-                            <option value="法语">法语</option>
-                            <option value="德语">德语</option>
-                        </select>
-                        <button id="exportWordsCsv" class="btn-export">导出单词(CSV)</button>
+
+        <nav class="flex justify-center mb-10">
+            <ul class="flex space-x-8">
+                <li><a href="#" class="nav-item active text-gray-700 font-medium hover:text-purple-600 transition-colors" data-tab="words">单词</a></li>
+                <li><a href="#" class="nav-item text-gray-700 font-medium hover:text-purple-600 transition-colors" data-tab="articles">文章</a></li>
+                <li><a href="#" class="nav-item text-gray-700 font-medium hover:text-purple-600 transition-colors" data-tab="study">学习模式</a></li>
+                <li><a href="#" class="nav-item text-gray-700 font-medium hover:text-purple-600 transition-colors" data-tab="export">导出</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- 单词管理 -->
+            <section id="words" class="tab-content">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card-bg rounded-xl shadow-lg p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">添加新单词</h2>
+                        <form id="word-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="word-language" class="block text-sm font-medium text-gray-700 mb-1">语言</label>
+                                    <select id="word-language" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                        <option value="thai">泰语</option>
+                                        <option value="japanese">日语</option>
+                                        <option value="korean">韩语</option>
+                                        <option value="vietnamese">越南语</option>
+                                        <option value="english">英语</option>
+                                        <option value="spanish">西班牙语</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="word-text" class="block text-sm font-medium text-gray-700 mb-1">单词</label>
+                                    <input type="text" id="word-text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入单词">
+                                </div>
+                                <div>
+                                    <label for="word-translation" class="block text-sm font-medium text-gray-700 mb-1">翻译</label>
+                                    <input type="text" id="word-translation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入翻译">
+                                </div>
+                                <div>
+                                    <label for="word-example" class="block text-sm font-medium text-gray-700 mb-1">例句</label>
+                                    <input type="text" id="word-example" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入例句">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="word-note" class="block text-sm font-medium text-gray-700 mb-1">注释</label>
+                                    <textarea id="word-note" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入注释"></textarea>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">添加单词</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-bg rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">单词列表</h2>
+                            <div class="flex space-x-2">
+                                <select id="filter-language" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="all">所有语言</option>
+                                    <option value="thai">泰语</option>
+                                    <option value="japanese">日语</option>
+                                    <option value="korean">韩语</option>
+                                    <option value="vietnamese">越南语</option>
+                                    <option value="english">英语</option>
+                                    <option value="spanish">西班牙语</option>
+                                </select>
+                                <input type="text" id="search-word" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="搜索单词">
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">语言</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">单词</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">翻译</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="word-list" class="bg-white divide-y divide-gray-200">
+                                    <!-- 单词列表将通过 JavaScript 动态生成 -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="filter-container">
-                    <select id="word-filter">
-                        <option value="all">所有语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
-                </div>
-                <div id="words-list"></div>
-            </div>
-        </div>
-        
-        <div id="articles-tab" class="tab-content">
-            <h2>添加新文章</h2>
-            <form id="article-form">
-                <div class="form-group">
-                    <label for="article-title">标题</label>
-                    <input type="text" id="article-title" required>
-                </div>
-                <div class="form-group">
-                    <label for="article-content">内容</label>
-                    <textarea id="article-content" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="article-language">语言</label>
-                    <select id="article-language" required>
-                        <option value="">选择语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
-                </div>
-                <button type="submit">添加文章</button>
-            </form>
-            
-            <div class="list-container">
-                <div class="export-container">
-                    <h2>文章列表</h2>
-                    <div>
-                        <select id="articleExportLanguage">
-                            <option value="all">全部语言</option>
-                            <option value="英语">英语</option>
-                            <option value="泰语">泰语</option>
-                            <option value="日语">日语</option>
-                            <option value="韩语">韩语</option>
-                            <option value="越南语">越南语</option>
-                            <option value="西班牙语">西班牙语</option>
-                            <option value="法语">法语</option>
-                            <option value="德语">德语</option>
-                        </select>
-                        <button id="exportArticlesCsv" class="btn-export">导出文章(CSV)</button>
+            </section>
+
+            <!-- 文章管理 -->
+            <section id="articles" class="tab-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card-bg rounded-xl shadow-lg p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">添加新文章</h2>
+                        <form id="article-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="article-language" class="block text-sm font-medium text-gray-700 mb-1">语言</label>
+                                    <select id="article-language" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                        <option value="thai">泰语</option>
+                                        <option value="japanese">日语</option>
+                                        <option value="korean">韩语</option>
+                                        <option value="vietnamese">越南语</option>
+                                        <option value="english">英语</option>
+                                        <option value="spanish">西班牙语</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="article-title" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
+                                    <input type="text" id="article-title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入标题">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="article-content" class="block text-sm font-medium text-gray-700 mb-1">内容</label>
+                                <textarea id="article-content" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入文章内容"></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button type="submit" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">添加文章</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-bg rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">文章列表</h2>
+                            <div class="flex space-x-2">
+                                <select id="filter-article-language" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="all">所有语言</option>
+                                    <option value="thai">泰语</option>
+                                    <option value="japanese">日语</option>
+                                    <option value="korean">韩语</option>
+                                    <option value="vietnamese">越南语</option>
+                                    <option value="english">英语</option>
+                                    <option value="spanish">西班牙语</option>
+                                </select>
+                                <input type="text" id="search-article" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="搜索文章">
+                            </div>
+                        </div>
+                        <div id="article-list" class="space-y-4">
+                            <!-- 文章列表将通过 JavaScript 动态生成 -->
+                        </div>
                     </div>
                 </div>
-                <div class="filter-container">
-                    <select id="article-filter">
-                        <option value="all">所有语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
+            </section>
+
+            <!-- 学习模式 -->
+            <section id="study" class="tab-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card-bg rounded-xl shadow-lg p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">学习设置</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="study-language" class="block text-sm font-medium text-gray-700 mb-1">选择语言</label>
+                                <select id="study-language" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="thai">泰语</option>
+                                    <option value="japanese">日语</option>
+                                    <option value="korean">韩语</option>
+                                    <option value="vietnamese">越南语</option>
+                                    <option value="english">英语</option>
+                                    <option value="spanish">西班牙语</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="study-mode" class="block text-sm font-medium text-gray-700 mb-1">学习模式</label>
+                                <select id="study-mode" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="flashcard">闪卡模式</option>
+                                    <option value="quiz">测验模式</option>
+                                    <option value="spelling">拼写练习</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="study-count" class="block text-sm font-medium text-gray-700 mb-1">学习数量</label>
+                                <input type="number" id="study-count" min="1" max="50" value="10" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                            <div class="flex items-end">
+                                <button id="start-study" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity w-full">开始学习</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="study-area" class="card-bg rounded-xl shadow-lg p-6 hidden">
+                        <div class="text-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">学习进行中</h2>
+                            <p class="text-gray-600"><span id="current-index">1</span> / <span id="total-count">10</span></p>
+                        </div>
+                        <div id="study-content" class="mb-8">
+                            <!-- 学习内容将通过 JavaScript 动态生成 -->
+                        </div>
+                        <div class="flex justify-between">
+                            <button id="prev-word" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">上一个</button>
+                            <button id="next-word" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">下一个</button>
+                        </div>
+                    </div>
                 </div>
-                <div id="articles-list"></div>
-            </div>
-        </div>
-        
-        <div id="study-tab" class="tab-content">
-            <h2>学习模式</h2>
-            <div class="form-group">
-                <label for="study-language">选择学习语言</label>
-                <select id="study-language">
-                    <option value="">选择语言</option>
-                    <option value="英语">英语</option>
-                    <option value="泰语">泰语</option>
-                    <option value="日语">日语</option>
-                    <option value="韩语">韩语</option>
-                    <option value="越南语">越南语</option>
-                    <option value="西班牙语">西班牙语</option>
-                    <option value="法语">法语</option>
-                    <option value="德语">德语</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="study-type">学习类型</label>
-                <select id="study-type">
-                    <option value="words">单词</option>
-                    <option value="articles">文章</option>
-                </select>
-            </div>
-            <button id="start-study">开始学习</button>
-            
-            <div id="study-content" class="list-container" style="display: none;">
-                <h2>学习内容</h2>
-                <div id="study-items"></div>
+            </section>
+
+            <!-- 导出功能 -->
+            <section id="export" class="tab-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="card-bg rounded-xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">导出数据</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800 mb-3">选择要导出的内容</h3>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="export-words" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" checked>
+                                        <span class="text-gray-700">单词</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="export-articles" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                                        <span class="text-gray-700">文章</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800 mb-3">选择语言</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="thai" checked>
+                                        <span class="text-gray-700">泰语</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="japanese" checked>
+                                        <span class="text-gray-700">日语</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="korean" checked>
+                                        <span class="text-gray-700">韩语</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="vietnamese" checked>
+                                        <span class="text-gray-700">越南语</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="english" checked>
+                                        <span class="text-gray-700">英语</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="export-language mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" value="spanish" checked>
+                                        <span class="text-gray-700">西班牙语</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800 mb-3">导出格式</h3>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="export-format" value="json" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300" checked>
+                                        <span class="text-gray-700">JSON</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="export-format" value="csv" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300">
+                                        <span class="text-gray-700">CSV</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="export-format" value="txt" class="mr-2 h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300">
+                                        <span class="text-gray-700">TXT</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button id="export-data" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">导出数据</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 单词详情模态框 -->
+    <div id="word-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">单词详情</h2>
+                    <button id="close-word-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="word-detail-content">
+                    <!-- 单词详情将通过 JavaScript 动态生成 -->
+                </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- 文章详情模态框 -->
+    <div id="article-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">文章详情</h2>
+                    <button id="close-article-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="article-detail-content">
+                    <!-- 文章详情将通过 JavaScript 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 编辑单词模态框 -->
-    <div id="edit-word-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>编辑单词</h2>
-                <span class="close">&times;</span>
+    <div id="edit-word-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">编辑单词</h2>
+                    <button id="close-edit-word-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form id="edit-word-form" class="space-y-4">
+                    <input type="hidden" id="edit-word-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-word-language" class="block text-sm font-medium text-gray-700 mb-1">语言</label>
+                            <select id="edit-word-language" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="thai">泰语</option>
+                                <option value="japanese">日语</option>
+                                <option value="korean">韩语</option>
+                                <option value="vietnamese">越南语</option>
+                                <option value="english">英语</option>
+                                <option value="spanish">西班牙语</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="edit-word-text" class="block text-sm font-medium text-gray-700 mb-1">单词</label>
+                            <input type="text" id="edit-word-text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="edit-word-translation" class="block text-sm font-medium text-gray-700 mb-1">翻译</label>
+                            <input type="text" id="edit-word-translation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="edit-word-example" class="block text-sm font-medium text-gray-700 mb-1">例句</label>
+                            <input type="text" id="edit-word-example" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="edit-word-note" class="block text-sm font-medium text-gray-700 mb-1">注释</label>
+                            <textarea id="edit-word-note" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancel-edit-word" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">取消</button>
+                        <button type="submit" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">保存</button>
+                    </div>
+                </form>
             </div>
-            <form id="edit-word-form">
-                <input type="hidden" id="edit-word-id">
-                <div class="form-group">
-                    <label for="edit-word-text">单词</label>
-                    <input type="text" id="edit-word-text" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-word-translation">翻译</label>
-                    <input type="text" id="edit-word-translation" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-word-language">语言</label>
-                    <select id="edit-word-language" required>
-                        <option value="">选择语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="edit-word-example">例句（可选）</label>
-                    <textarea id="edit-word-example"></textarea>
-                </div>
-                <button type="submit">保存修改</button>
-            </form>
         </div>
     </div>
-    
+
     <!-- 编辑文章模态框 -->
-    <div id="edit-article-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>编辑文章</h2>
-                <span class="close">&times;</span>
+    <div id="edit-article-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">编辑文章</h2>
+                    <button id="close-edit-article-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form id="edit-article-form" class="space-y-4">
+                    <input type="hidden" id="edit-article-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-article-language" class="block text-sm font-medium text-gray-700 mb-1">语言</label>
+                            <select id="edit-article-language" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="thai">泰语</option>
+                                <option value="japanese">日语</option>
+                                <option value="korean">韩语</option>
+                                <option value="vietnamese">越南语</option>
+                                <option value="english">英语</option>
+                                <option value="spanish">西班牙语</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="edit-article-title" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
+                            <input type="text" id="edit-article-title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="edit-article-content" class="block text-sm font-medium text-gray-700 mb-1">内容</label>
+                        <textarea id="edit-article-content" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancel-edit-article" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">取消</button>
+                        <button type="submit" class="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">保存</button>
+                    </div>
+                </form>
             </div>
-            <form id="edit-article-form">
-                <input type="hidden" id="edit-article-id">
-                <div class="form-group">
-                    <label for="edit-article-title">标题</label>
-                    <input type="text" id="edit-article-title" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-article-content">内容</label>
-                    <textarea id="edit-article-content" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="edit-article-language">语言</label>
-                    <select id="edit-article-language" required>
-                        <option value="">选择语言</option>
-                        <option value="英语">英语</option>
-                        <option value="泰语">泰语</option>
-                        <option value="日语">日语</option>
-                        <option value="韩语">韩语</option>
-                        <option value="越南语">越南语</option>
-                        <option value="西班牙语">西班牙语</option>
-                        <option value="法语">法语</option>
-                        <option value="德语">德语</option>
-                    </select>
-                </div>
-                <button type="submit">保存修改</button>
-            </form>
         </div>
     </div>
-    
-    <div id="notification" class="notification"></div>
-    
+
+    <!-- Toast 通知 -->
+    <div id="toast" class="toast"></div>
+
     <script>
         // 初始化数据
         let words = JSON.parse(localStorage.getItem('words')) || [];
         let articles = JSON.parse(localStorage.getItem('articles')) || [];
-        
-        // DOM 元素
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const wordForm = document.getElementById('word-form');
-        const articleForm = document.getElementById('article-form');
-        const wordsList = document.getElementById('words-list');
-        const articlesList = document.getElementById('articles-list');
-        const wordFilter = document.getElementById('word-filter');
-        const articleFilter = document.getElementById('article-filter');
-        const studyLanguage = document.getElementById('study-language');
-        const studyType = document.getElementById('study-type');
-        const startStudyBtn = document.getElementById('start-study');
-        const studyContent = document.getElementById('study-content');
-        const studyItems = document.getElementById('study-items');
-        const notification = document.getElementById('notification');
-        
-        // 导出相关元素
-        const wordExportLanguage = document.getElementById('wordExportLanguage');
-        const exportWordsCsv = document.getElementById('exportWordsCsv');
-        const articleExportLanguage = document.getElementById('articleExportLanguage');
-        const exportArticlesCsv = document.getElementById('exportArticlesCsv');
-        
-        // 编辑模态框元素
-        const editWordModal = document.getElementById('edit-word-modal');
-        const editArticleModal = document.getElementById('edit-article-modal');
-        const editWordForm = document.getElementById('edit-word-form');
-        const editArticleForm = document.getElementById('edit-article-form');
-        const closeButtons = document.querySelectorAll('.close');
-        
-        // 标签页切换
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-            });
-        });
-        
-        // 显示通知
-        function showNotification(message, duration = 3000) {
-            notification.textContent = message;
-            notification.style.display = 'block';
+        let currentStudyWords = [];
+        let currentStudyIndex = 0;
+
+        // 语言映射
+        const languageMap = {
+            'thai': '泰语',
+            'japanese': '日语',
+            'korean': '韩语',
+            'vietnamese': '越南语',
+            'english': '英语',
+            'spanish': '西班牙语'
+        };
+
+        // 显示 Toast 通知
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
             
             setTimeout(() => {
-                notification.style.display = 'none';
+                toast.classList.remove('show');
             }, duration);
         }
-        
+
+        // 标签页切换
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有活动状态
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
+                
+                // 添加当前活动状态
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+
         // 添加单词
-        wordForm.addEventListener('submit', (e) => {
+        document.getElementById('word-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const word = {
+            const language = document.getElementById('word-language').value;
+            const text = document.getElementById('word-text').value.trim();
+            const translation = document.getElementById('word-translation').value.trim();
+            const example = document.getElementById('word-example').value.trim();
+            const note = document.getElementById('word-note').value.trim();
+            
+            if (!text || !translation) {
+                showToast('请填写单词和翻译');
+                return;
+            }
+            
+            const newWord = {
                 id: Date.now(),
-                text: document.getElementById('word-text').value,
-                translation: document.getElementById('word-translation').value,
-                language: document.getElementById('word-language').value,
-                example: document.getElementById('word-example').value,
-                dateAdded: new Date().toLocaleString()
+                language,
+                text,
+                translation,
+                example,
+                note,
+                createdAt: new Date().toISOString()
             };
             
-            words.push(word);
+            words.push(newWord);
             localStorage.setItem('words', JSON.stringify(words));
             
-            wordForm.reset();
-            renderWords();
-            showNotification('单词添加成功！');
+            // 重置表单
+            this.reset();
+            
+            // 刷新单词列表
+            renderWordList();
+            
+            showToast('单词添加成功');
         });
-        
-        // 添加文章
-        articleForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const article = {
-                id: Date.now(),
-                title: document.getElementById('article-title').value,
-                content: document.getElementById('article-content').value,
-                language: document.getElementById('article-language').value,
-                dateAdded: new Date().toLocaleString()
-            };
-            
-            articles.push(article);
-            localStorage.setItem('articles', JSON.stringify(articles));
-            
-            articleForm.reset();
-            renderArticles();
-            showNotification('文章添加成功！');
-        });
-        
+
         // 渲染单词列表
-        function renderWords(filter = 'all') {
-            wordsList.innerHTML = '';
+        function renderWordList() {
+            const wordList = document.getElementById('word-list');
+            const filterLanguage = document.getElementById('filter-language').value;
+            const searchTerm = document.getElementById('search-word').value.toLowerCase();
             
-            const filteredWords = filter === 'all' 
-                ? words 
-                : words.filter(word => word.language === filter);
+            let filteredWords = words;
+            
+            // 按语言过滤
+            if (filterLanguage !== 'all') {
+                filteredWords = filteredWords.filter(word => word.language === filterLanguage);
+            }
+            
+            // 按搜索词过滤
+            if (searchTerm) {
+                filteredWords = filteredWords.filter(word => 
+                    word.text.toLowerCase().includes(searchTerm) || 
+                    word.translation.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            wordList.innerHTML = '';
             
             if (filteredWords.length === 0) {
-                wordsList.innerHTML = '<p>没有找到单词</p>';
+                wordList.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">没有找到单词</td>
+                    </tr>
+                `;
                 return;
             }
             
             filteredWords.forEach(word => {
-                const wordItem = document.createElement('div');
-                wordItem.className = 'list-item';
-                
-                wordItem.innerHTML = `
-                    <h3>${word.text}</h3>
-                    <div class="meta">翻译: ${word.translation} | 语言: ${word.language}</div>
-                    ${word.example ? `<p><strong>例句:</strong> ${word.example}</p>` : ''}
-                    <div class="actions">
-                        <button class="btn-edit" data-id="${word.id}">编辑</button>
-                        <button class="btn-delete" data-id="${word.id}">删除</button>
-                    </div>
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">${languageMap[word.language]}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${word.text}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${word.translation}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-3 view-word" data-id="${word.id}">查看</button>
+                        <button class="text-indigo-600 hover:text-indigo-900 mr-3 edit-word" data-id="${word.id}">编辑</button>
+                        <button class="text-red-600 hover:text-red-900 delete-word" data-id="${word.id}">删除</button>
+                    </td>
                 `;
-                
-                wordsList.appendChild(wordItem);
+                wordList.appendChild(tr);
             });
             
-            // 添加编辑和删除事件监听
-            document.querySelectorAll('#words-list .btn-edit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const wordId = parseInt(e.target.getAttribute('data-id'));
+            // 添加事件监听器
+            document.querySelectorAll('.view-word').forEach(button => {
+                button.addEventListener('click', function() {
+                    const wordId = parseInt(this.getAttribute('data-id'));
+                    viewWord(wordId);
+                });
+            });
+            
+            document.querySelectorAll('.edit-word').forEach(button => {
+                button.addEventListener('click', function() {
+                    const wordId = parseInt(this.getAttribute('data-id'));
                     editWord(wordId);
                 });
             });
             
-            document.querySelectorAll('#words-list .btn-delete').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const wordId = parseInt(e.target.getAttribute('data-id'));
+            document.querySelectorAll('.delete-word').forEach(button => {
+                button.addEventListener('click', function() {
+                    const wordId = parseInt(this.getAttribute('data-id'));
                     deleteWord(wordId);
                 });
             });
         }
-        
-        // 渲染文章列表
-        function renderArticles(filter = 'all') {
-            articlesList.innerHTML = '';
+
+        // 查看单词详情
+        function viewWord(id) {
+            const word = words.find(w => w.id === id);
+            if (!word) return;
             
-            const filteredArticles = filter === 'all' 
-                ? articles 
-                : articles.filter(article => article.language === filter);
+            const modal = document.getElementById('word-detail-modal');
+            const content = document.getElementById('word-detail-content');
             
-            if (filteredArticles.length === 0) {
-                articlesList.innerHTML = '<p>没有找到文章</p>';
-                return;
-            }
-            
-            filteredArticles.forEach(article => {
-                const articleItem = document.createElement('div');
-                articleItem.className = 'list-item';
-                
-                articleItem.innerHTML = `
-                    <h3>${article.title}</h3>
-                    <div class="meta">语言: ${article.language}</div>
-                    <p>${article.content}</p>
-                    <div class="actions">
-                        <button class="btn-edit" data-id="${article.id}">编辑</button>
-                        <button class="btn-delete" data-id="${article.id}">删除</button>
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">语言</h3>
+                        <p class="text-lg text-gray-900">${languageMap[word.language]}</p>
                     </div>
-                `;
-                
-                articlesList.appendChild(articleItem);
-            });
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">单词</h3>
+                        <p class="text-lg text-gray-900">${word.text}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">翻译</h3>
+                        <p class="text-lg text-gray-900">${word.translation}</p>
+                    </div>
+                    ${word.example ? `
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">例句</h3>
+                        <p class="text-lg text-gray-900">${word.example}</p>
+                    </div>
+                    ` : ''}
+                    ${word.note ? `
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">注释</h3>
+                        <p class="text-lg text-gray-900">${word.note}</p>
+                    </div>
+                    ` : ''}
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">创建时间</h3>
+                        <p class="text-lg text-gray-900">${new Date(word.createdAt).toLocaleString()}</p>
+                    </div>
+                </div>
+            `;
             
-            // 添加编辑和删除事件监听
-            document.querySelectorAll('#articles-list .btn-edit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const articleId = parseInt(e.target.getAttribute('data-id'));
-                    editArticle(articleId);
-                });
-            });
-            
-            document.querySelectorAll('#articles-list .btn-delete').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const articleId = parseInt(e.target.getAttribute('data-id'));
-                    deleteArticle(articleId);
-                });
-            });
+            modal.classList.remove('hidden');
         }
-        
+
         // 编辑单词
         function editWord(id) {
             const word = words.find(w => w.id === id);
             if (!word) return;
             
+            const modal = document.getElementById('edit-word-modal');
+            
             document.getElementById('edit-word-id').value = word.id;
+            document.getElementById('edit-word-language').value = word.language;
             document.getElementById('edit-word-text').value = word.text;
             document.getElementById('edit-word-translation').value = word.translation;
-            document.getElementById('edit-word-language').value = word.language;
             document.getElementById('edit-word-example').value = word.example || '';
+            document.getElementById('edit-word-note').value = word.note || '';
             
-            editWordModal.style.display = 'flex';
+            modal.classList.remove('hidden');
         }
-        
+
+        // 删除单词
+        function deleteWord(id) {
+            if (confirm('确定要删除这个单词吗？')) {
+                words = words.filter(w => w.id !== id);
+                localStorage.setItem('words', JSON.stringify(words));
+                renderWordList();
+                showToast('单词已删除');
+            }
+        }
+
+        // 添加文章
+        document.getElementById('article-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const language = document.getElementById('article-language').value;
+            const title = document.getElementById('article-title').value.trim();
+            const content = document.getElementById('article-content').value.trim();
+            
+            if (!title || !content) {
+                showToast('请填写标题和内容');
+                return;
+            }
+            
+            const newArticle = {
+                id: Date.now(),
+                language,
+                title,
+                content,
+                createdAt: new Date().toISOString()
+            };
+            
+            articles.push(newArticle);
+            localStorage.setItem('articles', JSON.stringify(articles));
+            
+            // 重置表单
+            this.reset();
+            
+            // 刷新文章列表
+            renderArticleList();
+            
+            showToast('文章添加成功');
+        });
+
+        // 渲染文章列表
+        function renderArticleList() {
+            const articleList = document.getElementById('article-list');
+            const filterLanguage = document.getElementById('filter-article-language').value;
+            const searchTerm = document.getElementById('search-article').value.toLowerCase();
+            
+            let filteredArticles = articles;
+            
+            // 按语言过滤
+            if (filterLanguage !== 'all') {
+                filteredArticles = filteredArticles.filter(article => article.language === filterLanguage);
+            }
+            
+            // 按搜索词过滤
+            if (searchTerm) {
+                filteredArticles = filteredArticles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) || 
+                    article.content.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            articleList.innerHTML = '';
+            
+            if (filteredArticles.length === 0) {
+                articleList.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">没有找到文章</div>
+                `;
+                return;
+            }
+            
+            filteredArticles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow';
+                articleCard.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 mr-2">${languageMap[article.language]}</span>
+                                <h3 class="text-lg font-medium text-gray-900">${article.title}</h3>
+                            </div>
+                            <p class="text-gray-600 line-clamp-3">${article.content}</p>
+                            <p class="text-xs text-gray-500 mt-2">${new Date(article.createdAt).toLocaleString()}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-indigo-600 hover:text-indigo-900 view-article" data-id="${article.id}">查看</button>
+                            <button class="text-indigo-600 hover:text-indigo-900 edit-article" data-id="${article.id}">编辑</button>
+                            <button class="text-red-600 hover:text-red-900 delete-article" data-id="${article.id}">删除</button>
+                        </div>
+                    </div>
+                `;
+                articleList.appendChild(articleCard);
+            });
+            
+            // 添加事件监听器
+            document.querySelectorAll('.view-article').forEach(button => {
+                button.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    viewArticle(articleId);
+                });
+            });
+            
+            document.querySelectorAll('.edit-article').forEach(button => {
+                button.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    editArticle(articleId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-article').forEach(button => {
+                button.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    deleteArticle(articleId);
+                });
+            });
+        }
+
+        // 查看文章详情
+        function viewArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            const modal = document.getElementById('article-detail-modal');
+            const content = document.getElementById('article-detail-content');
+            
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">语言</h3>
+                        <p class="text-lg text-gray-900">${languageMap[article.language]}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">标题</h3>
+                        <p class="text-lg text-gray-900">${article.title}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">内容</h3>
+                        <div class="text-lg text-gray-900 whitespace-pre-line">${article.content}</div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">创建时间</h3>
+                        <p class="text-lg text-gray-900">${new Date(article.createdAt).toLocaleString()}</p>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
         // 编辑文章
         function editArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
+            const modal = document.getElementById('edit-article-modal');
+            
             document.getElementById('edit-article-id').value = article.id;
+            document.getElementById('edit-article-language').value = article.language;
             document.getElementById('edit-article-title').value = article.title;
             document.getElementById('edit-article-content').value = article.content;
-            document.getElementById('edit-article-language').value = article.language;
             
-            editArticleModal.style.display = 'flex';
+            modal.classList.remove('hidden');
         }
-        
-        // 保存编辑的单词
-        editWordForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const id = parseInt(document.getElementById('edit-word-id').value);
-            const wordIndex = words.findIndex(w => w.id === id);
-            
-            if (wordIndex !== -1) {
-                words[wordIndex] = {
-                    ...words[wordIndex],
-                    text: document.getElementById('edit-word-text').value,
-                    translation: document.getElementById('edit-word-translation').value,
-                    language: document.getElementById('edit-word-language').value,
-                    example: document.getElementById('edit-word-example').value
-                };
-                
-                localStorage.setItem('words', JSON.stringify(words));
-                renderWords(wordFilter.value);
-                editWordModal.style.display = 'none';
-                showNotification('单词修改成功！');
-            }
-        });
-        
-        // 保存编辑的文章
-        editArticleForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const id = parseInt(document.getElementById('edit-article-id').value);
-            const articleIndex = articles.findIndex(a => a.id === id);
-            
-            if (articleIndex !== -1) {
-                articles[articleIndex] = {
-                    ...articles[articleIndex],
-                    title: document.getElementById('edit-article-title').value,
-                    content: document.getElementById('edit-article-content').value,
-                    language: document.getElementById('edit-article-language').value
-                };
-                
-                localStorage.setItem('articles', JSON.stringify(articles));
-                renderArticles(articleFilter.value);
-                editArticleModal.style.display = 'none';
-                showNotification('文章修改成功！');
-            }
-        });
-        
-        // 删除单词
-        function deleteWord(id) {
-            if (confirm('确定要删除这个单词吗？')) {
-                words = words.filter(word => word.id !== id);
-                localStorage.setItem('words', JSON.stringify(words));
-                renderWords(wordFilter.value);
-                showNotification('单词已删除');
-            }
-        }
-        
+
         // 删除文章
         function deleteArticle(id) {
             if (confirm('确定要删除这篇文章吗？')) {
-                articles = articles.filter(article => article.id !== id);
+                articles = articles.filter(a => a.id !== id);
                 localStorage.setItem('articles', JSON.stringify(articles));
-                renderArticles(articleFilter.value);
-                showNotification('文章已删除');
+                renderArticleList();
+                showToast('文章已删除');
             }
         }
-        
-        // 筛选单词
-        wordFilter.addEventListener('change', () => {
-            renderWords(wordFilter.value);
+
+        // 保存编辑的单词
+        document.getElementById('edit-word-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('edit-word-id').value);
+            const language = document.getElementById('edit-word-language').value;
+            const text = document.getElementById('edit-word-text').value.trim();
+            const translation = document.getElementById('edit-word-translation').value.trim();
+            const example = document.getElementById('edit-word-example').value.trim();
+            const note = document.getElementById('edit-word-note').value.trim();
+            
+            if (!text || !translation) {
+                showToast('请填写单词和翻译');
+                return;
+            }
+            
+            const wordIndex = words.findIndex(w => w.id === id);
+            if (wordIndex !== -1) {
+                words[wordIndex] = {
+                    ...words[wordIndex],
+                    language,
+                    text,
+                    translation,
+                    example,
+                    note
+                };
+                
+                localStorage.setItem('words', JSON.stringify(words));
+                renderWordList();
+                
+                // 关闭模态框
+                document.getElementById('edit-word-modal').classList.add('hidden');
+                
+                showToast('单词已更新');
+            }
         });
-        
-        // 筛选文章
-        articleFilter.addEventListener('change', () => {
-            renderArticles(articleFilter.value);
+
+        // 保存编辑的文章
+        document.getElementById('edit-article-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('edit-article-id').value);
+            const language = document.getElementById('edit-article-language').value;
+            const title = document.getElementById('edit-article-title').value.trim();
+            const content = document.getElementById('edit-article-content').value.trim();
+            
+            if (!title || !content) {
+                showToast('请填写标题和内容');
+                return;
+            }
+            
+            const articleIndex = articles.findIndex(a => a.id === id);
+            if (articleIndex !== -1) {
+                articles[articleIndex] = {
+                    ...articles[articleIndex],
+                    language,
+                    title,
+                    content
+                };
+                
+                localStorage.setItem('articles', JSON.stringify(articles));
+                renderArticleList();
+                
+                // 关闭模态框
+                document.getElementById('edit-article-modal').classList.add('hidden');
+                
+                showToast('文章已更新');
+            }
         });
-        
+
         // 开始学习
-        startStudyBtn.addEventListener('click', () => {
-            const language = studyLanguage.value;
-            const type = studyType.value;
+        document.getElementById('start-study').addEventListener('click', function() {
+            const language = document.getElementById('study-language').value;
+            const mode = document.getElementById('study-mode').value;
+            const count = parseInt(document.getElementById('study-count').value);
             
-            if (!language) {
-                showNotification('请选择学习语言');
+            // 获取指定语言的单词
+            let studyWords = words.filter(word => word.language === language);
+            
+            // 如果没有足够的单词，显示提示
+            if (studyWords.length === 0) {
+                showToast(`没有找到${languageMap[language]}的单词，请先添加一些单词`);
                 return;
             }
             
-            studyContent.style.display = 'block';
-            studyItems.innerHTML = '';
+            // 随机打乱单词顺序
+            studyWords = studyWords.sort(() => Math.random() - 0.5);
             
-            if (type === 'words') {
-                const filteredWords = words.filter(word => word.language === language);
+            // 限制学习数量
+            if (studyWords.length > count) {
+                studyWords = studyWords.slice(0, count);
+            }
+            
+            currentStudyWords = studyWords;
+            currentStudyIndex = 0;
+            
+            // 显示学习区域
+            document.getElementById('study-area').classList.remove('hidden');
+            document.getElementById('total-count').textContent = studyWords.length;
+            
+            // 显示第一个单词
+            showStudyWord();
+        });
+
+        // 显示学习单词
+        function showStudyWord() {
+            const word = currentStudyWords[currentStudyIndex];
+            const mode = document.getElementById('study-mode').value;
+            const studyContent = document.getElementById('study-content');
+            const currentIndex = document.getElementById('current-index');
+            
+            currentIndex.textContent = currentStudyIndex + 1;
+            
+            if (mode === 'flashcard') {
+                studyContent.innerHTML = `
+                    <div class="text-center">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-500 mb-2">单词</h3>
+                            <p class="text-3xl font-bold text-gray-900">${word.text}</p>
+                        </div>
+                        <div id="flashcard-translation" class="hidden">
+                            <h3 class="text-lg font-medium text-gray-500 mb-2">翻译</h3>
+                            <p class="text-2xl text-gray-900">${word.translation}</p>
+                            ${word.example ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">例句</h3>
+                                <p class="text-xl text-gray-900">${word.example}</p>
+                            </div>
+                            ` : ''}
+                            ${word.note ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">注释</h3>
+                                <p class="text-xl text-gray-900">${word.note}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <button id="show-translation" class="mt-6 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">显示翻译</button>
+                    </div>
+                `;
                 
-                if (filteredWords.length === 0) {
-                    studyItems.innerHTML = '<p>没有找到该语言的单词</p>';
-                    return;
-                }
-                
-                // 随机排序
-                const shuffledWords = [...filteredWords].sort(() => Math.random() - 0.5);
-                
-                shuffledWords.forEach(word => {
-                    const wordItem = document.createElement('div');
-                    wordItem.className = 'list-item';
-                    wordItem.innerHTML = `
-                        <h3>${word.text}</h3>
-                        <div class="meta">翻译: ${word.translation}</div>
-                        ${word.example ? `<p><strong>例句:</strong> ${word.example}</p>` : ''}
-                    `;
-                    studyItems.appendChild(wordItem);
+                document.getElementById('show-translation').addEventListener('click', function() {
+                    document.getElementById('flashcard-translation').classList.remove('hidden');
+                    this.classList.add('hidden');
                 });
+            } else if (mode === 'quiz') {
+                // 生成错误选项
+                const wrongOptions = words
+                    .filter(w => w.language === word.language && w.id !== word.id)
+                    .map(w => w.translation)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                // 所有选项
+                const options = [word.translation, ...wrongOptions].sort(() => Math.random() - 0.5);
+                
+                studyContent.innerHTML = `
+                    <div class="text-center">
+                        <div class="mb-8">
+                            <h3 class="text-lg font-medium text-gray-500 mb-2">单词</h3>
+                            <p class="text-3xl font-bold text-gray-900">${word.text}</p>
+                        </div>
+                        <div class="space-y-3">
+                            ${options.map((option, index) => `
+                                <button class="quiz-option w-full text-left px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" data-correct="${option === word.translation}">
+                                    ${String.fromCharCode(65 + index)}. ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="quiz-result" class="mt-6 hidden">
+                            <p class="text-lg font-medium"></p>
+                            ${word.example ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">例句</h3>
+                                <p class="text-xl text-gray-900">${word.example}</p>
+                            </div>
+                            ` : ''}
+                            ${word.note ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">注释</h3>
+                                <p class="text-xl text-gray-900">${word.note}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelectorAll('.quiz-option').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const isCorrect = this.getAttribute('data-correct') === 'true';
+                        const resultDiv = document.getElementById('quiz-result');
+                        const resultText = resultDiv.querySelector('p');
+                        
+                        // 禁用所有选项
+                        document.querySelectorAll('.quiz-option').forEach(opt => {
+                            opt.disabled = true;
+                            if (opt.getAttribute('data-correct') === 'true') {
+                                opt.classList.add('bg-green-100', 'border-green-500');
+                            } else if (opt === this && !isCorrect) {
+                                opt.classList.add('bg-red-100', 'border-red-500');
+                            }
+                        });
+                        
+                        // 显示结果
+                        if (isCorrect) {
+                            resultText.textContent = '回答正确！';
+                            resultText.className = 'text-lg font-medium text-green-600';
+                        } else {
+                            resultText.textContent = `回答错误！正确答案是：${word.translation}`;
+                            resultText.className = 'text-lg font-medium text-red-600';
+                        }
+                        
+                        resultDiv.classList.remove('hidden');
+                    });
+                });
+            } else if (mode === 'spelling') {
+                studyContent.innerHTML = `
+                    <div class="text-center">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-500 mb-2">翻译</h3>
+                            <p class="text-2xl text-gray-900">${word.translation}</p>
+                        </div>
+                        <div class="mb-6">
+                            <label for="spelling-input" class="block text-lg font-medium text-gray-700 mb-2">请输入单词拼写</label>
+                            <input type="text" id="spelling-input" class="w-full max-w-md mx-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="输入单词">
+                        </div>
+                        <button id="check-spelling" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">检查拼写</button>
+                        <div id="spelling-result" class="mt-6 hidden">
+                            <p class="text-lg font-medium"></p>
+                            ${word.example ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">例句</h3>
+                                <p class="text-xl text-gray-900">${word.example}</p>
+                            </div>
+                            ` : ''}
+                            ${word.note ? `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-medium text-gray-500 mb-2">注释</h3>
+                                <p class="text-xl text-gray-900">${word.note}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('check-spelling').addEventListener('click', function() {
+                    const input = document.getElementById('spelling-input').value.trim();
+                    const resultDiv = document.getElementById('spelling-result');
+                    const resultText = resultDiv.querySelector('p');
+                    
+                    if (!input) {
+                        showToast('请输入单词');
+                        return;
+                    }
+                    
+                    const isCorrect = input.toLowerCase() === word.text.toLowerCase();
+                    
+                    if (isCorrect) {
+                        resultText.textContent = '拼写正确！';
+                        resultText.className = 'text-lg font-medium text-green-600';
+                    } else {
+                        resultText.textContent = `拼写错误！正确答案是：${word.text}`;
+                        resultText.className = 'text-lg font-medium text-red-600';
+                    }
+                    
+                    resultDiv.classList.remove('hidden');
+                    this.disabled = true;
+                });
+            }
+        }
+
+        // 上一个单词
+        document.getElementById('prev-word').addEventListener('click', function() {
+            if (currentStudyIndex > 0) {
+                currentStudyIndex--;
+                showStudyWord();
+            }
+        });
+
+        // 下一个单词
+        document.getElementById('next-word').addEventListener('click', function() {
+            if (currentStudyIndex < currentStudyWords.length - 1) {
+                currentStudyIndex++;
+                showStudyWord();
             } else {
-                const filteredArticles = articles.filter(article => article.language === language);
+                showToast('学习完成！');
+                document.getElementById('study-area').classList.add('hidden');
+            }
+        });
+
+        // 导出数据
+        document.getElementById('export-data').addEventListener('click', function() {
+            const exportWords = document.getElementById('export-words').checked;
+            const exportArticles = document.getElementById('export-articles').checked;
+            const selectedLanguages = Array.from(document.querySelectorAll('.export-language:checked')).map(cb => cb.value);
+            const format = document.querySelector('input[name="export-format"]:checked').value;
+            
+            if (!exportWords && !exportArticles) {
+                showToast('请选择要导出的内容');
+                return;
+            }
+            
+            if (selectedLanguages.length === 0) {
+                showToast('请选择至少一种语言');
+                return;
+            }
+            
+            let exportData = {};
+            
+            if (exportWords) {
+                exportData.words = words.filter(word => selectedLanguages.includes(word.language));
+            }
+            
+            if (exportArticles) {
+                exportData.articles = articles.filter(article => selectedLanguages.includes(article.language));
+            }
+            
+            let content, filename, mimeType;
+            
+            if (format === 'json') {
+                content = JSON.stringify(exportData, null, 2);
+                filename = 'language-learning-data.json';
+                mimeType = 'application/json';
+            } else if (format === 'csv') {
+                let csvContent = '';
                 
-                if (filteredArticles.length === 0) {
-                    studyItems.innerHTML = '<p>没有找到该语言的文章</p>';
-                    return;
+                if (exportWords) {
+                    csvContent += 'Words\n';
+                    csvContent += 'Language,Word,Translation,Example,Note,Created At\n';
+                    
+                    exportData.words.forEach(word => {
+                        csvContent += `"${languageMap[word.language]}","${word.text}","${word.translation}","${word.example || ''}","${word.note || ''}","${word.createdAt}"\n`;
+                    });
+                    
+                    csvContent += '\n';
                 }
                 
-                // 随机排序
-                const shuffledArticles = [...filteredArticles].sort(() => Math.random() - 0.5);
+                if (exportArticles) {
+                    csvContent += 'Articles\n';
+                    csvContent += 'Language,Title,Content,Created At\n';
+                    
+                    exportData.articles.forEach(article => {
+                        csvContent += `"${languageMap[article.language]}","${article.title}","${article.content.replace(/"/g, '""')}","${article.createdAt}"\n`;
+                    });
+                }
                 
-                shuffledArticles.forEach(article => {
-                    const articleItem = document.createElement('div');
-                    articleItem.className = 'list-item';
-                    articleItem.innerHTML = `
-                        <h3>${article.title}</h3>
-                        <p>${article.content}</p>
-                    `;
-                    studyItems.appendChild(articleItem);
-                });
-            }
-        });
-        
-        // 导出单词为CSV
-        exportWordsCsv.addEventListener('click', function() {
-            const selectedLanguage = wordExportLanguage.value;
-            exportWordsToCsv(selectedLanguage);
-        });
-        
-        // 导出文章为CSV
-        exportArticlesCsv.addEventListener('click', function() {
-            const selectedLanguage = articleExportLanguage.value;
-            exportArticlesToCsv(selectedLanguage);
-        });
-        
-        // 导出单词为CSV函数
-        function exportWordsToCsv(language) {
-            let wordsToExport = words;
-            
-            // 按语言筛选
-            if (language !== 'all') {
-                wordsToExport = words.filter(word => word.language === language);
-            }
-            
-            if (wordsToExport.length === 0) {
-                showNotification('没有可导出的单词！');
-                return;
-            }
-            
-            // 创建CSV内容
-            let csvContent = "单词,翻译,语言,例句,添加日期\n";
-            
-            wordsToExport.forEach(word => {
-                // 处理逗号和换行符，避免破坏CSV格式
-                const escapedWord = `"${word.text.replace(/"/g, '""')}"`;
-                const escapedTranslation = `"${word.translation.replace(/"/g, '""')}"`;
-                const escapedLanguage = `"${word.language.replace(/"/g, '""')}"`;
-                const escapedExample = `"${(word.example || '').replace(/"/g, '""')}"`;
-                const escapedDate = `"${word.dateAdded.replace(/"/g, '""')}"`;
+                content = csvContent;
+                filename = 'language-learning-data.csv';
+                mimeType = 'text/csv';
+            } else if (format === 'txt') {
+                let txtContent = '';
                 
-                csvContent += `${escapedWord},${escapedTranslation},${escapedLanguage},${escapedExample},${escapedDate}\n`;
-            });
+                if (exportWords) {
+                    txtContent += '=== WORDS ===\n\n';
+                    
+                    exportData.words.forEach(word => {
+                        txtContent += `Language: ${languageMap[word.language]}\n`;
+                        txtContent += `Word: ${word.text}\n`;
+                        txtContent += `Translation: ${word.translation}\n`;
+                        
+                        if (word.example) {
+                            txtContent += `Example: ${word.example}\n`;
+                        }
+                        
+                        if (word.note) {
+                            txtContent += `Note: ${word.note}\n`;
+                        }
+                        
+                        txtContent += `Created At: ${word.createdAt}\n`;
+                        txtContent += '\n';
+                    });
+                    
+                    txtContent += '\n';
+                }
+                
+                if (exportArticles) {
+                    txtContent += '=== ARTICLES ===\n\n';
+                    
+                    exportData.articles.forEach(article => {
+                        txtContent += `Language: ${languageMap[article.language]}\n`;
+                        txtContent += `Title: ${article.title}\n`;
+                        txtContent += `Content: ${article.content}\n`;
+                        txtContent += `Created At: ${article.createdAt}\n`;
+                        txtContent += '\n';
+                    });
+                }
+                
+                content = txtContent;
+                filename = 'language-learning-data.txt';
+                mimeType = 'text/plain';
+            }
             
             // 创建下载链接
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([content], { type: mimeType });
             const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `单词列表_${language === 'all' ? '全部语言' : language}_${new Date().toISOString().slice(0, 10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
             
-            showNotification(`单词已导出为CSV格式！`);
-        }
-        
-        // 导出文章为CSV函数
-        function exportArticlesToCsv(language) {
-            let articlesToExport = articles;
-            
-            // 按语言筛选
-            if (language !== 'all') {
-                articlesToExport = articles.filter(article => article.language === language);
-            }
-            
-            if (articlesToExport.length === 0) {
-                showNotification('没有可导出的文章！');
-                return;
-            }
-            
-            // 创建CSV内容
-            let csvContent = "标题,内容,语言,添加日期\n";
-            
-            articlesToExport.forEach(article => {
-                // 处理逗号和换行符，避免破坏CSV格式
-                const escapedTitle = `"${article.title.replace(/"/g, '""')}"`;
-                const escapedContent = `"${article.content.replace(/"/g, '""')}"`;
-                const escapedLanguage = `"${article.language.replace(/"/g, '""')}"`;
-                const escapedDate = `"${article.dateAdded.replace(/"/g, '""')}"`;
-                
-                csvContent += `${escapedTitle},${escapedContent},${escapedLanguage},${escapedDate}\n`;
-            });
-            
-            // 创建下载链接
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `文章列表_${language === 'all' ? '全部语言' : language}_${new Date().toISOString().slice(0, 10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showNotification(`文章已导出为CSV格式！`);
-        }
-        
+            showToast('数据导出成功');
+        });
+
         // 关闭模态框
-        closeButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                editWordModal.style.display = 'none';
-                editArticleModal.style.display = 'none';
-            });
+        document.getElementById('close-word-modal').addEventListener('click', function() {
+            document.getElementById('word-detail-modal').classList.add('hidden');
         });
-        
-        // 点击模态框外部关闭
-        window.addEventListener('click', (e) => {
-            if (e.target === editWordModal) {
-                editWordModal.style.display = 'none';
-            }
-            if (e.target === editArticleModal) {
-                editArticleModal.style.display = 'none';
-            }
+
+        document.getElementById('close-article-modal').addEventListener('click', function() {
+            document.getElementById('article-detail-modal').classList.add('hidden');
         });
-        
-        // 初始化渲染
-        renderWords();
-        renderArticles();
+
+        document.getElementById('close-edit-word-modal').addEventListener('click', function() {
+            document.getElementById('edit-word-modal').classList.add('hidden');
+        });
+
+        document.getElementById('close-edit-article-modal').addEventListener('click', function() {
+            document.getElementById('edit-article-modal').classList.add('hidden');
+        });
+
+        document.getElementById('cancel-edit-word').addEventListener('click', function() {
+            document.getElementById('edit-word-modal').classList.add('hidden');
+        });
+
+        document.getElementById('cancel-edit-article').addEventListener('click', function() {
+            document.getElementById('edit-article-modal').classList.add('hidden');
+        });
+
+        // 筛选和搜索
+        document.getElementById('filter-language').addEventListener('change', renderWordList);
+        document.getElementById('search-word').addEventListener('input', renderWordList);
+        document.getElementById('filter-article-language').addEventListener('change', renderArticleList);
+        document.getElementById('search-article').addEventListener('input', renderArticleList);
+
+        // 初始化页面
+        renderWordList();
+        renderArticleList();
     </script>
 </body>
 </html>
